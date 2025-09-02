@@ -1,0 +1,26 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; margin-top: 8px; margin-right: 8px; margin-bottom: 8px; margin-left: 8px;">
+        <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+            <ui:VisualElement style="flex-grow: 1;">
+                <ui:VisualElement style="flex-grow: 1; flex-direction: row; background-color: rgb(153, 153, 153);">
+                    <ui:VisualElement style="flex-grow: 1;" />
+                    <Unity.AppUI.UI.Text style="flex-grow: 1;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1;" />
+            <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: flex-end;">
+                <ui:Button text="Button" />
+                <ui:Button text="Button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement picking-mode="Ignore" style="flex-grow: 5;" />
+        <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: space-around; align-self: stretch; align-items: center;">
+            <Unity.AppUI.UI.FloatingActionButton />
+            <Unity.AppUI.UI.FloatingActionButton />
+            <Unity.AppUI.UI.FloatingActionButton />
+            <Unity.AppUI.UI.FloatingActionButton />
+            <Unity.AppUI.UI.FloatingActionButton />
+            <Unity.AppUI.UI.FloatingActionButton />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -26,14 +26,9 @@ namespace AtomicSimulation.Authoring
         [Tooltip("Spacing between atoms in the grid")]
         public float atomSpacing = 3f;
         
-        [Header("Materials")]
-        public Material protonMaterial;
-        public Material neutronMaterial;  
-        public Material electronMaterial;
-
-        [Header("Mesh")] public GameObject neutron;
-        [Header("Mesh")] public GameObject proton;
-        [Header("Mesh")] public GameObject electron;
+        public GameObject neutron;
+        public GameObject proton;
+        public GameObject electron;
         
         public class AtomicSimulationBaker : Baker<AtomicSimulationAuthoring>
         {
