@@ -119,6 +119,60 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &684747570
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 684747572}
+  - component: {fileID: 684747571}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &684747571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 684747570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50c18678887c4cd9b1106a95f889215c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Atoms.Data::AtomicSimulation.Authoring.AtomicSimulationAuthoring
+  elementProgressionInterval: 3
+  baseOrbitSpeed: 1
+  nucleusScale: 1
+  electronScale: 1
+  elementsPerRow: 10
+  atomSpacing: 3
+  protonMaterial: {fileID: 2100000, guid: 509ba2017177afcde8e55cf80d649bcc, type: 2}
+  neutronMaterial: {fileID: 2100000, guid: 509ba2017177afcde8e55cf80d649bcc, type: 2}
+  electronMaterial: {fileID: 2100000, guid: 509ba2017177afcde8e55cf80d649bcc, type: 2}
+  neutron: {fileID: 5225003289196216097, guid: 89ec63cf6ffe6863b9d997f34d49e25d, type: 3}
+--- !u!4 &684747572
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 684747570}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.17158, y: -0.66556, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &893902822
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -181,3 +235,4 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 893902822}
+  - {fileID: 684747572}

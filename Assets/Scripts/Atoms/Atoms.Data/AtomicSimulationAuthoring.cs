@@ -1,3 +1,4 @@
+using Unity.Entities;
 using UnityEngine;
 
 namespace AtomicSimulation.Authoring
@@ -29,8 +30,27 @@ namespace AtomicSimulation.Authoring
         public Material protonMaterial;
         public Material neutronMaterial;  
         public Material electronMaterial;
+
+        [Header("Mesh")] public GameObject neutron;
         
-        [Header("Mesh")]
-        public Mesh particleMesh;
+        public class AtomicSimulationBaker : Baker<AtomicSimulationAuthoring>
+        {
+            public override void Bake(AtomicSimulationAuthoring authoring)
+            {
+                var entity = GetEntity(TransformUsageFlags.None);
+            
+                AddComponent(entity, new Core.SimulationConfig
+                {
+                    ElementProgressionInterval = authoring.elementProgressionInterval,
+                    BaseOrbitSpeed = authoring.baseOrbitSpeed,
+                    NucleusScale = authoring.nucleusScale,
+                    ElectronScale = authoring.electronScale,
+                    MaxAtomicNumber = 118,
+                    ElementsPerRow = authoring.elementsPerRow,
+                    AtomSpacing = authoring.atomSpacing,
+                    Neutron = GetEntity(authoring.neutron, TransformUsageFlags.None)
+                });
+            }
+        }
     }
 }

@@ -59,6 +59,7 @@ namespace AtomicSimulation.Core
         public int MaxAtomicNumber;
         public int ElementsPerRow;
         public float AtomSpacing;
+        public Entity Neutron;
     }
 
     public struct SimulationTimer : IComponentData
@@ -119,7 +120,7 @@ namespace AtomicSimulation.Core
             [ReadOnly] public FixedList128Bytes<int> MaxElectronsPerShell;
             [ReadOnly] public SimulationConfig Config;
 
-            public void Execute([ChunkIndexInQuery] int chunkIndex, Entity atomEntity, 
+            public void Execute([ChunkIndexInQuery] int chunkIndex, Entity entity, 
                 in AtomicNumber atomicNumber, in AtomCenter center)
             {
                 // Skip if atom already has particles (check for any particle component)
@@ -137,7 +138,7 @@ namespace AtomicSimulation.Core
                 // Create protons
                 for (int i = 0; i < atomicNumber; i++)
                 {
-                    var protonEntity = ECB.CreateEntity(chunkIndex);
+                    var protonEntity = ECB.Instantiate(chunkIndex,Config.Neutron);
                     var nucleusOffset = GetNucleusParticleOffset(i, totalNucleusParticles);
                     
                     ECB.AddComponent(chunkIndex, protonEntity, LocalTransform.FromPositionRotationScale(
@@ -150,7 +151,7 @@ namespace AtomicSimulation.Core
                 // Create neutrons  
                 for (int i = 0; i < neutronCount; i++)
                 {
-                    var neutronEntity = ECB.CreateEntity(chunkIndex);
+                    var neutronEntity = ECB.Instantiate(chunkIndex,Config.Neutron);
                     var nucleusOffset = GetNucleusParticleOffset(atomicNumber + i, totalNucleusParticles);
                     
                     ECB.AddComponent(chunkIndex, neutronEntity, LocalTransform.FromPositionRotationScale(
@@ -174,7 +175,7 @@ namespace AtomicSimulation.Core
 
                     for (int i = 0; i < electronsInShell; i++)
                     {
-                        var electronEntity = ECB.CreateEntity(chunkIndex);
+                        var electronEntity = ECB.Instantiate(chunkIndex,Config.Neutron);
                         float initialAngle = (float)i / electronsInShell * 2f * math.PI;
                         
                         var orbitPos = centerPos + new float3(
@@ -365,19 +366,6 @@ namespace AtomicSimulation.Core
         {
             if (hasInitialized) return;
             hasInitialized = true;
-
-            // Create simulation configuration singleton
-            var configEntity = state.EntityManager.CreateEntity();
-            state.EntityManager.AddComponentData(configEntity, new SimulationConfig
-            {
-                ElementProgressionInterval = 3f,
-                BaseOrbitSpeed = 1f,
-                NucleusScale = 0.1f,
-                ElectronScale = 0.05f,
-                MaxAtomicNumber = 118, // Oganesson
-                ElementsPerRow = 10,
-                AtomSpacing = 3f
-            });
 
             // Create simulation timer singleton  
             var timerEntity = state.EntityManager.CreateEntity();
