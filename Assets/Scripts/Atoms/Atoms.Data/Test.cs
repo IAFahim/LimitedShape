@@ -62,6 +62,7 @@ namespace AtomicSimulation.Core
 }
 
 [BurstCompile]
+[WithPresent(typeof(NeedsAtomSetup))]
 public partial struct CreateAtomJob : IJobEntity
 {
     public EntityCommandBuffer.ParallelWriter ECB;
@@ -72,7 +73,7 @@ public partial struct CreateAtomJob : IJobEntity
     private void Execute(
         [ChunkIndexInQuery] int chunkIndex, Entity entity,
         in AtomicNumber atomicNumber,
-        in AtomCenter center, in NeedsAtomSetup _
+        in AtomCenter center
     )
     {
         CreateNucleus(chunkIndex, atomicNumber.Value, center.Position);
@@ -163,6 +164,7 @@ namespace AtomicSimulation.Core
 {
     [BurstCompile]
     [UpdateInGroup(typeof(SimulationSystemGroup))]
+    [WithPresent(typeof(ElectronParticle))]
     public partial struct ElectronOrbitSystem : ISystem
     {
         [BurstCompile]
@@ -185,7 +187,7 @@ namespace AtomicSimulation.Core
 
             private void Execute(
                 ref LocalTransform transform, ref OrbitData orbitData,
-                in AtomCenter atomCenter, in ElectronParticle electron
+                in AtomCenter atomCenter
             )
             {
                 // Update orbit angle
@@ -286,13 +288,10 @@ namespace AtomicSimulation.Core
     [BurstCompile]
     public partial struct SimulationBootstrapSystem : ISystem
     {
-        private bool hasInitialized;
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            if (hasInitialized) return;
-            hasInitialized = true;
 
             // Create simulation timer singleton  
             var timerEntity = state.EntityManager.CreateEntity();
@@ -327,6 +326,7 @@ namespace AtomicSimulation.Core
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
             UnityEngine.Debug.Log("Atomic Simulation Bootstrap Complete - Starting with Hydrogen");
 #endif
+            state.Enabled = false;
         }
     }
 }
