@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: UI_it
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: it
+  m_SharedData: {fileID: 11400000, guid: 146dfb8b2ea3c154e856fab3257b47e9, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 20234711040
+    m_Localized: Premi un tasto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783240936730624
+    m_Localized: Gioca
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254312366080
+    m_Localized: Opzioni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783278840655872
+    m_Localized: Esci
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1788173601812480
+    m_Localized: Esci da BovineLabs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1788186184724480
+    m_Localized: Sei sicuro di voler uscire?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1788530281230336
+    m_Localized: Annulla
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1879002676801536
+    m_Localized: Grafica
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1879075406032896
+    m_Localized: Audio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1879097493237760
+    m_Localized: "Giocabilit\xE0"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1879132679254016
+    m_Localized: Controlli
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977918880755712
+    m_Localized: Gioco privato
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977948937138176
+    m_Localized: Crea una partita per giocatore singolo solo per te.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977958869250048
+    m_Localized: Ospita una partita
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977972941139968
+    m_Localized: Ospita il tuo gioco online.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977993338040320
+    m_Localized: Unisciti a una partita
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977998387982336
+    m_Localized: Unisciti a una partita online.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4437699143741440
+    m_Localized: Lingua
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042586806202368
+    m_Localized: Risoluzione
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042616308936704
+    m_Localized: "Modalit\xE0 finestra"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042656435843072
+    m_Localized: Schermo intero
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042775512133632
+    m_Localized: Finestra senza bordi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042807883771904
+    m_Localized: Finestra massimizzata
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042859507265536
+    m_Localized: Finestra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5059732789604352
+    m_Localized: Volume principale
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6855162334621696
+    m_Localized: Reimposta tutto ai valori predefiniti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6855210535563264
+    m_Localized: Ripristina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6855270862237696
+    m_Localized: Annulla
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6855289887600640
+    m_Localized: Reimposta
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6855316362047488
+    m_Localized: Sei sicuro di voler ripristinare i valori predefiniti?
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

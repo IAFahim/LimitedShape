@@ -1,0 +1,144 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: UI_de
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: de
+  m_SharedData: {fileID: 11400000, guid: 146dfb8b2ea3c154e856fab3257b47e9, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 20234711040
+    m_Localized: "Beliebige Taste dr\xFCcken"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783240936730624
+    m_Localized: Spielen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254312366080
+    m_Localized: Optionen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783278840655872
+    m_Localized: Beenden
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1788173601812480
+    m_Localized: BovineLabs beenden
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1788186184724480
+    m_Localized: "Sind Sie sicher, dass Sie beenden m\xF6chten?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1788530281230336
+    m_Localized: Abbrechen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1879002676801536
+    m_Localized: Grafik
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1879075406032896
+    m_Localized: Audio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1879097493237760
+    m_Localized: Spielablauf
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1879132679254016
+    m_Localized: Steuerung
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977918880755712
+    m_Localized: Privates Spiel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977948937138176
+    m_Localized: "Erstellen Sie ein Einzelspiel nur f\xFCr sich."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977958869250048
+    m_Localized: Spiel hosten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977972941139968
+    m_Localized: Hosten Sie Ihr eigenes Spiel online.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977993338040320
+    m_Localized: Spiel beitreten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977998387982336
+    m_Localized: Treten Sie einem Online-Spiel bei.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4437699143741440
+    m_Localized: Sprache
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042586806202368
+    m_Localized: "Aufl\xF6sung"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042616308936704
+    m_Localized: Fenstermodus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042656435843072
+    m_Localized: Vollbild
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042775512133632
+    m_Localized: Randloses Fenster
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042807883771904
+    m_Localized: Maximiertes Fenster
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042859507265536
+    m_Localized: Fenster
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5059732789604352
+    m_Localized: "Hauptlautst\xE4rke"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6855162334621696
+    m_Localized: "Alle auf Standard zur\xFCcksetzen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6855210535563264
+    m_Localized: "Zur\xFCcksetzen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6855270862237696
+    m_Localized: Abbrechen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6855289887600640
+    m_Localized: "Zur\xFCcksetzen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6855316362047488
+    m_Localized: "Sind Sie sicher, dass Sie auf die Standardwerte zur\xFCcksetzen
+      m\xF6chten?"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

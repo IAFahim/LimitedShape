@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa3e46f8fcb74e8a91530627feec8064, type: 3}
+  m_Name: MouseAndKeyboard
+  m_EditorClassIdentifier: 
+  Id: '@Controls:mouseKeyboard'
+  Groups:
+  - Name: '@Controls:movementKeybinds'
+    Bindings:
+    - Name: '@Controls:forward'
+      Binding:
+        Asset: {fileID: -1680190386980627800, guid: 7879de97618fbbc4a8b786dcab847f57, type: 3}
+        BindingId: e2062cb9-1b15-46a2-838c-2f8d72a0bdd9
+        Bindable: 1
+    - Name: '@Controls:backward'
+      Binding:
+        Asset: {fileID: 5545367079167114310, guid: 7879de97618fbbc4a8b786dcab847f57, type: 3}
+        BindingId: 83b62e04-a614-410a-8a98-4310440cf469
+        Bindable: 1
+    - Name: '@Controls:left'
+      Binding:
+        Asset: {fileID: 5545367079167114310, guid: 7879de97618fbbc4a8b786dcab847f57, type: 3}
+        BindingId: 6de3edb5-94ba-42b1-9ef1-4c62747942d4
+        Bindable: 1
+    - Name: '@Controls:right'
+      Binding:
+        Asset: {fileID: 5545367079167114310, guid: 7879de97618fbbc4a8b786dcab847f57, type: 3}
+        BindingId: 7e83b16c-fddf-4229-abd9-4ee95bce7c49
+        Bindable: 1

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 402ef6b0e406424799f115b83ff589e3, type: 3}
+  m_Name: ServerSettings
+  m_EditorClassIdentifier: 
+  pause: {fileID: 0}
+  playerController: {fileID: 0}
+  playerCharacter: {fileID: 0}
+  relevancy:
+    ClampExtents: 75
+    ExpandExtents: 8

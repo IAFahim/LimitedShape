@@ -1,0 +1,36 @@
+{
+    "name": "BovineLabs.Sample.Editor",
+    "rootNamespace": "",
+    "references": [
+        "BovineLabs.Sample",
+        "BovineLabs.Sample.Authoring",
+        "BovineLabs.Sample.Data",
+        "BovineLabs.Core",
+        "BovineLabs.Core.Editor",
+        "BovineLabs.Core.Extensions",
+        "BovineLabs.Core.Extensions.Editor",
+        "Unity.Burst",
+        "Unity.Collections",
+        "Unity.Entities",
+        "Unity.Entities.Graphics",
+        "Unity.Entities.Hybrid",
+        "Unity.InputSystem",
+        "Unity.Logging",
+        "Unity.Mathematics",
+        "Unity.Mathematics.Extensions",
+        "Unity.Physics",
+        "Unity.Transforms"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

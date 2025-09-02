@@ -1,0 +1,7 @@
+﻿/*.bl-options-view {*/
+/*    flex-grow: 1;*/
+/*}*/
+
+.bl-options-view__app-bar {
+    flex-direction: row;
+}

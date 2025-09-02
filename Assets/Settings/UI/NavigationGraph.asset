@@ -1,0 +1,551 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9160375923928301191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ac212c624cd4a46acc6d3430ae62e14, type: 3}
+  m_Name: loading
+  m_EditorClassIdentifier: 
+  m_Position: {x: 783, y: 892}
+  m_Guid: 6a8be88d8edf8c940a23f4b74a53c34b
+  m_Parent: {fileID: -7532879379263821953}
+  m_Actions: []
+  m_Label: 
+  m_StartDestination: {fileID: 2841306256936346824}
+--- !u!114 &-8332698965459697664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: go_to_loading
+  m_EditorClassIdentifier: 
+  m_Position: {x: 176, y: 892}
+  m_Guid: c48664ee-e487-4f52-a1e3-3da1be55fd34
+  m_Destination: {fileID: -9160375923928301191}
+  m_Options:
+    m_PopUpToStrategy: 2
+    m_PopUpToRoute: {fileID: 495329373620435017}
+    m_PopUpToInclusive: 1
+    m_EnterAnim: 0
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 0
+    m_PopUpToSaveState: 0
+    m_RestoreState: 1
+    m_LaunchSingleTop: 1
+  m_DefaultArguments: []
+--- !u!114 &-7532879379263821953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ac212c624cd4a46acc6d3430ae62e14, type: 3}
+  m_Name: nav_graph
+  m_EditorClassIdentifier: 
+  m_Position: {x: 0, y: 0}
+  m_Guid: a6e1db66-95b4-4ad2-aa90-4df06bd7ee99
+  m_Parent: {fileID: 0}
+  m_Actions:
+  - {fileID: 2529057888650423257}
+  - {fileID: -7055608030703456034}
+  - {fileID: -2530038940492783818}
+  - {fileID: -8332698965459697664}
+  - {fileID: 7373990631451018387}
+  m_Label: 
+  m_StartDestination: {fileID: 1313778473273987451}
+--- !u!114 &-7529291594430966415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: game
+  m_EditorClassIdentifier: 
+  m_Position: {x: 288, y: 28}
+  m_Guid: b9a0ee3ead8668b48b16575fb4b842d0
+  m_Parent: {fileID: -1284282594312467507}
+  m_Actions: []
+  m_Label: '@UI:Game'
+  m_TemplateSettings:
+    rid: 851261738636017884
+  m_Arguments: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 851261738636017884
+      type: {class: AnchorDestinationTemplate, ns: BovineLabs.Anchor, asm: BovineLabs.Anchor}
+      data:
+        m_ScreenType: BovineLabs.Sample.UI.Views.Game.GameView, BovineLabs.Sample,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_ShowBottomNavBar: 0
+        m_ShowAppBar: 0
+        m_ShowBackButton: 0
+        m_ShowDrawer: 0
+        m_ShowNavigationRail: 0
+--- !u!114 &-7055608030703456034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: go_to_game
+  m_EditorClassIdentifier: 
+  m_Position: {x: 176, y: 124}
+  m_Guid: 0f09f1b4-d1c5-40a0-8413-b2d085f3d425
+  m_Destination: {fileID: -1284282594312467507}
+  m_Options:
+    m_PopUpToStrategy: 2
+    m_PopUpToRoute: {fileID: 495329373620435017}
+    m_PopUpToInclusive: 1
+    m_EnterAnim: 0
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 0
+    m_PopUpToSaveState: 0
+    m_RestoreState: 1
+    m_LaunchSingleTop: 1
+  m_DefaultArguments: []
+--- !u!114 &-6559890311979039774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ac212c624cd4a46acc6d3430ae62e14, type: 3}
+  m_Name: option_graph
+  m_EditorClassIdentifier: 
+  m_Position: {x: 783, y: 508}
+  m_Guid: 91d17da6fe4dbb64da2554a59db7715b
+  m_Parent: {fileID: -7532879379263821953}
+  m_Actions: []
+  m_Label: 
+  m_StartDestination: {fileID: -1097476687846272200}
+--- !u!114 &-4758872269367621958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: play
+  m_EditorClassIdentifier: Unity.AppUI.Navigation::Unity.AppUI.Navigation.NavDestination
+  m_Position: {x: 684, y: 1306}
+  m_Guid: 5e9329114108a7b6bbc6d402f161691e
+  m_Parent: {fileID: -7532879379263821953}
+  m_Actions: []
+  m_Label: '@UI:Play'
+  m_TemplateSettings:
+    rid: 7993425400843469055
+  m_Arguments: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 7993425400843469055
+      type: {class: AnchorDestinationTemplate, ns: BovineLabs.Anchor, asm: BovineLabs.Anchor}
+      data:
+        m_ScreenType: BovineLabs.Sample.UI.Views.Menu.PlayView, BovineLabs.Sample,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_ShowBottomNavBar: 0
+        m_ShowAppBar: 1
+        m_ShowBackButton: 1
+        m_ShowDrawer: 0
+        m_ShowNavigationRail: 0
+--- !u!114 &-4519737102504757554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: splash_to_home
+  m_EditorClassIdentifier: 
+  m_Position: {x: 176, y: -639}
+  m_Guid: 47329120-de9a-4acc-bede-73e6a9a690fd
+  m_Destination: {fileID: 8751286032290811110}
+  m_Options:
+    m_PopUpToStrategy: 1
+    m_PopUpToRoute: {fileID: 1313778473273987451}
+    m_PopUpToInclusive: 1
+    m_EnterAnim: 0
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 0
+    m_PopUpToSaveState: 0
+    m_RestoreState: 1
+    m_LaunchSingleTop: 1
+  m_DefaultArguments: []
+--- !u!114 &-2530038940492783818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: go_to_options
+  m_EditorClassIdentifier: 
+  m_Position: {x: 176, y: 508}
+  m_Guid: 85c6966d-3aae-48e6-877e-9316c3b6e1fa
+  m_Destination: {fileID: -6559890311979039774}
+  m_Options:
+    m_PopUpToStrategy: 2
+    m_PopUpToRoute: {fileID: 495329373620435017}
+    m_PopUpToInclusive: 0
+    m_EnterAnim: 0
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 0
+    m_PopUpToSaveState: 1
+    m_RestoreState: 1
+    m_LaunchSingleTop: 0
+  m_DefaultArguments: []
+--- !u!114 &-1284282594312467507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ac212c624cd4a46acc6d3430ae62e14, type: 3}
+  m_Name: game_graph
+  m_EditorClassIdentifier: 
+  m_Position: {x: 778, y: 124}
+  m_Guid: 0b58aab6e38d04f4f982ad8074b40e45
+  m_Parent: {fileID: -7532879379263821953}
+  m_Actions: []
+  m_Label: 
+  m_StartDestination: {fileID: -7529291594430966415}
+--- !u!114 &-1097476687846272200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: options
+  m_EditorClassIdentifier: 
+  m_Position: {x: -175, y: -379}
+  m_Guid: e6c5ddab899d5534190883f16a4b653c
+  m_Parent: {fileID: -6559890311979039774}
+  m_Actions: []
+  m_Label: '@UI:option'
+  m_TemplateSettings:
+    rid: 851261738636017885
+  m_Arguments: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 851261738636017885
+      type: {class: AnchorDestinationTemplate, ns: BovineLabs.Anchor, asm: BovineLabs.Anchor}
+      data:
+        m_ScreenType: BovineLabs.Sample.UI.Views.Option.OptionsView, BovineLabs.Sample,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_ShowBottomNavBar: 0
+        m_ShowAppBar: 0
+        m_ShowBackButton: 0
+        m_ShowDrawer: 0
+        m_ShowNavigationRail: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33d5b7fe0491446cbd625fd576a3105e, type: 3}
+  m_Name: NavigationGraph
+  m_EditorClassIdentifier: 
+  m_Nodes:
+  - {fileID: -7532879379263821953}
+  - {fileID: 1313778473273987451}
+  - {fileID: -4519737102504757554}
+  - {fileID: 8751286032290811110}
+  - {fileID: 495329373620435017}
+  - {fileID: 2529057888650423257}
+  - {fileID: -7055608030703456034}
+  - {fileID: -1284282594312467507}
+  - {fileID: -7529291594430966415}
+  - {fileID: -6559890311979039774}
+  - {fileID: -1097476687846272200}
+  - {fileID: -2530038940492783818}
+  - {fileID: 2455655040138057443}
+  - {fileID: 4461908891943129193}
+  - {fileID: -8332698965459697664}
+  - {fileID: -9160375923928301191}
+  - {fileID: 2841306256936346824}
+  - {fileID: 7373990631451018387}
+  - {fileID: -4758872269367621958}
+--- !u!114 &495329373620435017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: home
+  m_EditorClassIdentifier: 
+  m_Position: {x: -962, y: -503}
+  m_Guid: 4d658baffeeff6a40bbb1b15e644db04
+  m_Parent: {fileID: 8751286032290811110}
+  m_Actions:
+  - {fileID: 2455655040138057443}
+  m_Label: '@UI:Home'
+  m_TemplateSettings:
+    rid: 851261738636017882
+  m_Arguments: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 851261738636017882
+      type: {class: AnchorDestinationTemplate, ns: BovineLabs.Anchor, asm: BovineLabs.Anchor}
+      data:
+        m_ScreenType: BovineLabs.Sample.UI.Views.Menu.HomeView, BovineLabs.Sample,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_ShowBottomNavBar: 0
+        m_ShowAppBar: 0
+        m_ShowBackButton: 0
+        m_ShowDrawer: 0
+        m_ShowNavigationRail: 0
+--- !u!114 &1313778473273987451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: splash
+  m_EditorClassIdentifier: 
+  m_Position: {x: -318, y: -639}
+  m_Guid: a65e34759180fc248aebf798ea604bce
+  m_Parent: {fileID: -7532879379263821953}
+  m_Actions:
+  - {fileID: -4519737102504757554}
+  m_Label: '@UI:Splash'
+  m_TemplateSettings:
+    rid: 851261738636017881
+  m_Arguments: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 851261738636017881
+      type: {class: AnchorDestinationTemplate, ns: BovineLabs.Anchor, asm: BovineLabs.Anchor}
+      data:
+        m_ScreenType: BovineLabs.Sample.UI.Views.Menu.SplashView, BovineLabs.Sample,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_ShowBottomNavBar: 0
+        m_ShowAppBar: 0
+        m_ShowBackButton: 0
+        m_ShowDrawer: 0
+        m_ShowNavigationRail: 0
+--- !u!114 &2455655040138057443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: home_to_play
+  m_EditorClassIdentifier: 
+  m_Position: {x: -450, y: -503}
+  m_Guid: 9f815ccd-23e0-4644-b419-8fecc939e684
+  m_Destination: {fileID: 4461908891943129193}
+  m_Options:
+    m_PopUpToStrategy: 2
+    m_PopUpToRoute: {fileID: 495329373620435017}
+    m_PopUpToInclusive: 0
+    m_EnterAnim: 3
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 0
+    m_PopUpToSaveState: 1
+    m_RestoreState: 1
+    m_LaunchSingleTop: 0
+  m_DefaultArguments: []
+--- !u!114 &2529057888650423257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: go_to_home
+  m_EditorClassIdentifier: 
+  m_Position: {x: 176, y: -260}
+  m_Guid: f7fabcc2-cc68-43fb-a887-7c12fc8d6c73
+  m_Destination: {fileID: 8751286032290811110}
+  m_Options:
+    m_PopUpToStrategy: 2
+    m_PopUpToRoute: {fileID: 0}
+    m_PopUpToInclusive: 1
+    m_EnterAnim: 0
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 0
+    m_PopUpToSaveState: 0
+    m_RestoreState: 1
+    m_LaunchSingleTop: 1
+  m_DefaultArguments: []
+--- !u!114 &2841306256936346824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: loading
+  m_EditorClassIdentifier: 
+  m_Position: {x: 647, y: 921}
+  m_Guid: 2345801428de4064d88cd4475f2a6a37
+  m_Parent: {fileID: -9160375923928301191}
+  m_Actions: []
+  m_Label: '@UI:Loading'
+  m_TemplateSettings:
+    rid: 851261738636017886
+  m_Arguments: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 851261738636017886
+      type: {class: AnchorDestinationTemplate, ns: BovineLabs.Anchor, asm: BovineLabs.Anchor}
+      data:
+        m_ScreenType: BovineLabs.Sample.UI.Views.Menu.LoadingView, BovineLabs.Sample,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_ShowBottomNavBar: 0
+        m_ShowAppBar: 0
+        m_ShowBackButton: 0
+        m_ShowDrawer: 0
+        m_ShowNavigationRail: 0
+--- !u!114 &4461908891943129193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: play
+  m_EditorClassIdentifier: 
+  m_Position: {x: -1, y: -503}
+  m_Guid: 85f5f690db3f97f4b81e786097f1548b
+  m_Parent: {fileID: 8751286032290811110}
+  m_Actions: []
+  m_Label: '@UI:Play'
+  m_TemplateSettings:
+    rid: 851261738636017883
+  m_Arguments: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 851261738636017883
+      type: {class: AnchorDestinationTemplate, ns: BovineLabs.Anchor, asm: BovineLabs.Anchor}
+      data:
+        m_ScreenType: BovineLabs.Sample.UI.Views.Menu.PlayView, BovineLabs.Sample,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_ShowBottomNavBar: 0
+        m_ShowAppBar: 1
+        m_ShowBackButton: 1
+        m_ShowDrawer: 0
+        m_ShowNavigationRail: 0
+--- !u!114 &7373990631451018387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: go_to_play
+  m_EditorClassIdentifier: Unity.AppUI.Navigation::Unity.AppUI.Navigation.NavAction
+  m_Position: {x: 176, y: 1306}
+  m_Guid: 7718b623-2d20-4231-b37c-b4d46bb3e46d
+  m_Destination: {fileID: -4758872269367621958}
+  m_Options:
+    m_PopUpToStrategy: 0
+    m_PopUpToRoute: {fileID: 0}
+    m_PopUpToInclusive: 0
+    m_EnterAnim: 0
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 0
+    m_PopUpToSaveState: 0
+    m_RestoreState: 0
+    m_LaunchSingleTop: 0
+  m_DefaultArguments: []
+--- !u!114 &8751286032290811110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ac212c624cd4a46acc6d3430ae62e14, type: 3}
+  m_Name: home_graph
+  m_EditorClassIdentifier: 
+  m_Position: {x: 782, y: -436}
+  m_Guid: 29c90595a8e9e134ebe505602d13e017
+  m_Parent: {fileID: -7532879379263821953}
+  m_Actions: []
+  m_Label: 
+  m_StartDestination: {fileID: 495329373620435017}

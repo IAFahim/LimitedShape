@@ -1,0 +1,159 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: UI_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 146dfb8b2ea3c154e856fab3257b47e9, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 20234711040
+    m_Localized: Press Any Button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783240936730624
+    m_Localized: Play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254312366080
+    m_Localized: Options
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783278840655872
+    m_Localized: Quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1788173601812480
+    m_Localized: Quit BovineLabs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1788186184724480
+    m_Localized: Are you sure you want to quit?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1788530281230336
+    m_Localized: Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1879002676801536
+    m_Localized: Graphics
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1879075406032896
+    m_Localized: Audio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1879097493237760
+    m_Localized: Gameplay
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1879132679254016
+    m_Localized: Controls
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977958869250048
+    m_Localized: Host Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977918880755712
+    m_Localized: Private Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977948937138176
+    m_Localized: Create a single player game just for you.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977972941139968
+    m_Localized: Host your own game online.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977993338040320
+    m_Localized: Join Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3977998387982336
+    m_Localized: Join an online game.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4437699143741440
+    m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042586806202368
+    m_Localized: Resolution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042616308936704
+    m_Localized: Window Mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042656435843072
+    m_Localized: Full Screen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042775512133632
+    m_Localized: Borderless Window
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042807883771904
+    m_Localized: Maximized Window
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5042859507265536
+    m_Localized: Window
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5059732789604352
+    m_Localized: Master Volume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6855162334621696
+    m_Localized: Reset All to Defaults
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6855210535563264
+    m_Localized: Revert
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6855270862237696
+    m_Localized: Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6855289887600640
+    m_Localized: Reset
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6855316362047488
+    m_Localized: Are you sure you want to reset to the default values?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6893956249235456
+    m_Localized: Rebind Control
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6893984531427328
+    m_Localized: Press a key to rebind your control. Escape to cancel.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569075728625664
+    m_Localized: Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569108293201920
+    m_Localized: Load Game
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

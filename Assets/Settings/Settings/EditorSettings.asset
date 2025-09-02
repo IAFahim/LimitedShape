@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8edbd0fa5e59a9344a83df1b3177d250, type: 3}
+  m_Name: EditorSettings
+  m_EditorClassIdentifier: 
+  paths:
+  - Key: settings
+    Path: Assets/Settings/Settings
+  - Key: distort.control
+    Path: Assets/Settings/Schemas/Control/
+  - Key: settings.resource
+    Path: Assets/Settings/
+  - Key: object.definitions
+    Path: Assets/Settings/Definitions
+  - Key: object.groups
+    Path: Assets/Settings/Groups
+  - Key: bl.subscene-set
+    Path: Assets/Settings/Scenes/
+  - Key: bl.subscene-editor-set
+    Path: Assets/Settings/Scenes/Editor
+  - Key: bl.subscene-asset-set
+    Path: Assets/Settings/Scenes/Assets
+  - Key: bl.ar.objectdefinition
+    Path: Assets/Settings/ObjectDefinitions
+  - Key: bl.ar.objectgroup
+    Path: Assets/Settings/ObjectGroups
+  - Key: bl.ar.controlschema
+    Path: Assets/Settings/Schemas/Control
+  - Key: bl.ar.subsceneset
+    Path: Assets/Settings/Scenes
+  - Key: bl.ar.subsceneeditorset
+    Path: Assets/Settings/Scenes/Editor
+  - Key: bl.ar.assetset
+    Path: Assets/Settings/Scenes/Assets
+  - Key: bl.ar.conditioneventobject
+    Path: Assets/Settings/Schemas/Events/
+  - Key: bl.ar.intrinsicschemaobject
+    Path: Assets/Settings/Schemas/Intrinsics/
+  - Key: bl.ar.statschemaobject
+    Path: Assets/Settings/Schemas/Stats
+  prebakeScenes:
+  - {fileID: 102900000, guid: 434fb67dd45f9d041bf501ddf6d84e87, type: 3}
+  - {fileID: 102900000, guid: 12c3ac3f712fa6447934e2c76cb143b3, type: 3}
+  - {fileID: 102900000, guid: 7826639a4f45ea84b82e431cedbba575, type: 3}
+  - {fileID: 102900000, guid: 73e85a973cc88cf4baa62974e69b4115, type: 3}
+  - {fileID: 102900000, guid: 9257b7fb43ff3064c95a771aca82b20d, type: 3}
+  startupScene: {fileID: 102900000, guid: 99c9720ab356a0642a771bea13969a05, type: 3}
+  defaultSettingsAuthoring: {fileID: 5523294873506209897, guid: 6d34cbd235bfdab48b2915f6f527d66e, type: 3}
+  settingAuthoring:
+  - World: service
+    Authoring: {fileID: 3524311629298979471, guid: fad37ce3a3e629247af91f04a75ec4bd, type: 3}
+  - World: server
+    Authoring: {fileID: 5272041701630145522, guid: 44c2a1fa12bc96844ab98e4d39c744ad, type: 3}
+  - World: client
+    Authoring: {fileID: 5268580225628793035, guid: 83777f4f5cf3a4e4cb16ac98634ef09b, type: 3}
