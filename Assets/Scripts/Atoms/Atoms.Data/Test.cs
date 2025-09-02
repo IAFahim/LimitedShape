@@ -1,3 +1,4 @@
+using AtomicSimulation.Authoring;
 using AtomicSimulation.Core;
 using Unity.Burst;
 using Unity.Collections;
@@ -10,18 +11,6 @@ namespace AtomicSimulation.Core
     public struct AtomicNumber : IComponentData
     {
         public int Value;
-    }
-
-    public enum ParticleTypeEnum : byte
-    {
-        Proton,
-        Neutron,
-        Electron
-    }
-
-    public struct ParticleType : IComponentData
-    {
-        public ParticleTypeEnum Value;
     }
 
     public struct OrbitData : IComponentData
@@ -79,7 +68,12 @@ public partial struct CreateAtomJob : IJobEntity
     [ReadOnly] public FixedList128Bytes<int> MaxElectronsPerShell;
     [ReadOnly] public SimulationConfig Config;
 
-    public void Execute(Entity entity, [ChunkIndexInQuery] int chunkIndex, in AtomicNumber atomicNumber, in AtomCenter center, in NeedsAtomSetup _)
+    [BurstCompile]
+    private void Execute(
+        [ChunkIndexInQuery] int chunkIndex, Entity entity,
+        in AtomicNumber atomicNumber,
+        in AtomCenter center, in NeedsAtomSetup _
+    )
     {
         CreateNucleus(chunkIndex, atomicNumber.Value, center.Position);
         CreateElectronShells(chunkIndex, atomicNumber.Value, center.Position);
@@ -87,38 +81,47 @@ public partial struct CreateAtomJob : IJobEntity
         ECB.RemoveComponent<NeedsAtomSetup>(chunkIndex, entity);
     }
 
+    [BurstCompile]
     private void CreateNucleus(int chunkIndex, int atomicNumber, float3 centerPos)
     {
-        int neutronCount = CalculateNeutronCount(atomicNumber);
-        int totalNucleusParticles = atomicNumber + neutronCount;
+        AtomicData.SimplifiedNeutronNucleusCount(atomicNumber, out var neutrons, out var nucleus);
 
         // Create protons
         for (int i = 0; i < atomicNumber; i++)
         {
             var protonEntity = ECB.Instantiate(chunkIndex, Config.ProtonPrefab);
-            var nucleusOffset = GetNucleusParticleOffset(i, totalNucleusParticles);
+            AtomicData.GetNucleusParticleOffset(i, nucleus, out var nucleusOffset);
 
-            ECB.AddComponent(chunkIndex, protonEntity, LocalTransform.FromPositionRotationScale(
-                centerPos + nucleusOffset, quaternion.identity, Config.NucleusScale));
-            ECB.AddComponent(chunkIndex, protonEntity, new ParticleType { Value = ParticleTypeEnum.Proton });
+            ECB.AddComponent(chunkIndex, protonEntity,
+                LocalTransform.FromPositionRotationScale(
+                    centerPos + nucleusOffset,
+                    quaternion.identity,
+                    Config.NucleusScale
+                )
+            );
             ECB.AddComponent(chunkIndex, protonEntity, new NucleusParticle { LocalOffset = nucleusOffset });
             ECB.AddComponent(chunkIndex, protonEntity, new AtomCenter { Position = centerPos });
         }
 
         // Create neutrons  
-        for (int i = 0; i < neutronCount; i++)
+        for (int i = 0; i < neutrons; i++)
         {
             var neutronEntity = ECB.Instantiate(chunkIndex, Config.NeutronPrefab);
-            var nucleusOffset = GetNucleusParticleOffset(atomicNumber + i, totalNucleusParticles);
+            AtomicData.GetNucleusParticleOffset(atomicNumber + i, nucleus, out var nucleusOffset);
 
-            ECB.AddComponent(chunkIndex, neutronEntity, LocalTransform.FromPositionRotationScale(
-                centerPos + nucleusOffset, quaternion.identity, Config.NucleusScale));
-            ECB.AddComponent(chunkIndex, neutronEntity, new ParticleType { Value = ParticleTypeEnum.Neutron });
+            ECB.AddComponent(chunkIndex, neutronEntity,
+                LocalTransform.FromPositionRotationScale(
+                    centerPos + nucleusOffset,
+                    quaternion.identity,
+                    Config.NucleusScale
+                )
+            );
             ECB.AddComponent(chunkIndex, neutronEntity, new NucleusParticle { LocalOffset = nucleusOffset });
             ECB.AddComponent(chunkIndex, neutronEntity, new AtomCenter { Position = centerPos });
         }
     }
 
+    [BurstCompile]
     private void CreateElectronShells(int chunkIndex, int atomicNumber, float3 centerPos)
     {
         int remainingElectrons = atomicNumber;
@@ -130,19 +133,14 @@ public partial struct CreateAtomJob : IJobEntity
             float shellRadius = shellNumber * 0.5f;
             float shellSpeed = Config.BaseOrbitSpeed / shellRadius; // Inner shells orbit faster
 
-            for (int i = 0; i < electronsInShell; i++)
+            for (int electronIndex = 0; electronIndex < electronsInShell; electronIndex++)
             {
+                AtomicData.ElectronInitialAngle(electronIndex, electronsInShell, centerPos, shellRadius,
+                    out var initialAngle, out var orbitPos);
+
                 var electronEntity = ECB.Instantiate(chunkIndex, Config.ElectronPrefab);
-                float initialAngle = (float)i / electronsInShell * 2f * math.PI;
-
-                var orbitPos = centerPos + new float3(
-                    shellRadius * math.cos(initialAngle),
-                    shellRadius * math.sin(initialAngle),
-                    0f);
-
                 ECB.AddComponent(chunkIndex, electronEntity, LocalTransform.FromPositionRotationScale(
                     orbitPos, quaternion.identity, Config.ElectronScale));
-                ECB.AddComponent(chunkIndex, electronEntity, new ParticleType { Value = ParticleTypeEnum.Electron });
                 ECB.AddComponent(chunkIndex, electronEntity, new ElectronParticle());
                 ECB.AddComponent(chunkIndex, electronEntity, new OrbitData
                 {
@@ -158,34 +156,8 @@ public partial struct CreateAtomJob : IJobEntity
             shellNumber++;
         }
     }
-
-    private float3 GetNucleusParticleOffset(int particleIndex, int totalParticles)
-    {
-        if (totalParticles == 1) return float3.zero;
-
-        float radius = 0.02f + (totalParticles * 0.001f);
-
-        // Golden spiral distribution for roughly uniform sphere packing
-        float goldenAngle = 2.39996322972865332f;
-        float theta = particleIndex * goldenAngle;
-        float phi = math.acos(1f - 2f * (float)particleIndex / totalParticles);
-
-        return new float3(
-            radius * math.sin(phi) * math.cos(theta),
-            radius * math.sin(phi) * math.sin(theta),
-            radius * math.cos(phi)
-        );
-    }
-
-    private int CalculateNeutronCount(int atomicNumber)
-    {
-        // Simplified neutron approximation
-        if (atomicNumber <= 2) return math.max(0, atomicNumber - 1);
-        if (atomicNumber <= 20) return atomicNumber;
-        return (int)(atomicNumber * 1.4f);
-    }
 }
-// Systems/ElectronOrbitSystem.cs
+
 
 namespace AtomicSimulation.Core
 {
@@ -211,8 +183,10 @@ namespace AtomicSimulation.Core
         {
             public float DeltaTime;
 
-            public void Execute(ref LocalTransform transform, ref OrbitData orbitData,
-                in AtomCenter atomCenter, in ElectronParticle electron)
+            private void Execute(
+                ref LocalTransform transform, ref OrbitData orbitData,
+                in AtomCenter atomCenter, in ElectronParticle electron
+            )
             {
                 // Update orbit angle
                 orbitData.CurrentAngle += orbitData.Speed * DeltaTime;
@@ -242,36 +216,6 @@ namespace AtomicSimulation.Core
     [UpdateAfter(typeof(ElectronOrbitSystem))]
     public partial struct ElementProgressionSystem : ISystem
     {
-        private static readonly FixedString64Bytes[] ElementNames = new FixedString64Bytes[]
-        {
-            "Hydrogen", "Helium", "Lithium", "Beryllium", "Boron", "Carbon", "Nitrogen", "Oxygen",
-            "Fluorine", "Neon", "Sodium", "Magnesium", "Aluminum", "Silicon", "Phosphorus", "Sulfur",
-            "Chlorine", "Argon", "Potassium", "Calcium", "Scandium", "Titanium", "Vanadium", "Chromium",
-            "Manganese", "Iron", "Cobalt", "Nickel", "Copper", "Zinc", "Gallium", "Germanium",
-            "Arsenic", "Selenium", "Bromine", "Krypton", "Rubidium", "Strontium", "Yttrium", "Zirconium",
-            // ... Continue with all 118 elements (truncated for brevity)
-            "Oganesson"
-        };
-
-        public static readonly FixedList128Bytes<int> MaxElectronsPerShell = new()
-        {
-            Length = 7,
-            [0] = 2, // K shell
-            [1] = 8, // L shell  
-            [2] = 18, // M shell
-            [3] = 32, // N shell
-            [4] = 32, // O shell
-            [5] = 18, // P shell
-            [6] = 8 // Q shell
-        };
-
-
-        public void OnCreate(ref SystemState state)
-        {
-            state.RequireForUpdate<SimulationConfig>();
-            state.RequireForUpdate<SimulationTimer>();
-        }
-
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
@@ -294,7 +238,7 @@ namespace AtomicSimulation.Core
                 var createAtomJob = new CreateAtomJob
                 {
                     ECB = ecb.AsParallelWriter(),
-                    MaxElectronsPerShell = MaxElectronsPerShell,
+                    MaxElectronsPerShell = AtomicData.MaxElectronsPerShell,
                     Config = SystemAPI.GetSingleton<SimulationConfig>()
                 };
 
@@ -306,15 +250,16 @@ namespace AtomicSimulation.Core
 
                 // Log element creation (only in development builds)
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
-                if (timer.CurrentMaxAtomicNumber <= ElementNames.Length)
+                if (timer.CurrentMaxAtomicNumber <= AtomicData.ElementNames.Length)
                 {
                     UnityEngine.Debug.Log(
-                        $"Created {ElementNames[timer.CurrentMaxAtomicNumber - 1]} (Z={timer.CurrentMaxAtomicNumber})");
+                        $"Created {AtomicData.ElementNames[timer.CurrentMaxAtomicNumber - 1]} (Z={timer.CurrentMaxAtomicNumber})");
                 }
 #endif
             }
         }
 
+        [BurstCompile]
         private void CreateNextElement(ref SystemState state, int atomicNumber, in SimulationConfig config)
         {
             // Calculate grid position
@@ -369,7 +314,7 @@ namespace AtomicSimulation.Core
             var createAtomJob = new CreateAtomJob
             {
                 ECB = ecb.AsParallelWriter(),
-                MaxElectronsPerShell = ElementProgressionSystem.MaxElectronsPerShell,
+                MaxElectronsPerShell = AtomicData.MaxElectronsPerShell,
                 Config = config
             };
 
