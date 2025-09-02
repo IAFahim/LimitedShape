@@ -32,6 +32,8 @@ namespace AtomicSimulation.Authoring
         public Material electronMaterial;
 
         [Header("Mesh")] public GameObject neutron;
+        [Header("Mesh")] public GameObject proton;
+        [Header("Mesh")] public GameObject electron;
         
         public class AtomicSimulationBaker : Baker<AtomicSimulationAuthoring>
         {
@@ -48,7 +50,9 @@ namespace AtomicSimulation.Authoring
                     MaxAtomicNumber = 118,
                     ElementsPerRow = authoring.elementsPerRow,
                     AtomSpacing = authoring.atomSpacing,
-                    Neutron = GetEntity(authoring.neutron, TransformUsageFlags.None)
+                    NeutronPrefab = GetEntity(authoring.neutron, TransformUsageFlags.None),
+                    ProtonPrefab = GetEntity(authoring.proton, TransformUsageFlags.None),
+                    ElectronPrefab = GetEntity(authoring.electron, TransformUsageFlags.None)
                 });
             }
         }

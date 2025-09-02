@@ -60,7 +60,9 @@ namespace AtomicSimulation.Core
         public int MaxAtomicNumber;
         public int ElementsPerRow;
         public float AtomSpacing;
-        public Entity Neutron;
+        public Entity ProtonPrefab;
+        public Entity NeutronPrefab;
+        public Entity ElectronPrefab;
     }
 
     public struct SimulationTimer : IComponentData
@@ -93,7 +95,7 @@ public partial struct CreateAtomJob : IJobEntity
         // Create protons
         for (int i = 0; i < atomicNumber; i++)
         {
-            var protonEntity = ECB.Instantiate(chunkIndex, Config.Neutron);
+            var protonEntity = ECB.Instantiate(chunkIndex, Config.ProtonPrefab);
             var nucleusOffset = GetNucleusParticleOffset(i, totalNucleusParticles);
 
             ECB.AddComponent(chunkIndex, protonEntity, LocalTransform.FromPositionRotationScale(
@@ -106,7 +108,7 @@ public partial struct CreateAtomJob : IJobEntity
         // Create neutrons  
         for (int i = 0; i < neutronCount; i++)
         {
-            var neutronEntity = ECB.Instantiate(chunkIndex, Config.Neutron);
+            var neutronEntity = ECB.Instantiate(chunkIndex, Config.NeutronPrefab);
             var nucleusOffset = GetNucleusParticleOffset(atomicNumber + i, totalNucleusParticles);
 
             ECB.AddComponent(chunkIndex, neutronEntity, LocalTransform.FromPositionRotationScale(
@@ -130,7 +132,7 @@ public partial struct CreateAtomJob : IJobEntity
 
             for (int i = 0; i < electronsInShell; i++)
             {
-                var electronEntity = ECB.Instantiate(chunkIndex, Config.Neutron);
+                var electronEntity = ECB.Instantiate(chunkIndex, Config.ElectronPrefab);
                 float initialAngle = (float)i / electronsInShell * 2f * math.PI;
 
                 var orbitPos = centerPos + new float3(
@@ -337,7 +339,6 @@ namespace AtomicSimulation.Core
 namespace AtomicSimulation.Core
 {
     [BurstCompile]
-    [UpdateInGroup(typeof(InitializationSystemGroup))]
     public partial struct SimulationBootstrapSystem : ISystem
     {
         private bool hasInitialized;
