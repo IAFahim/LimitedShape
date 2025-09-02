@@ -151,7 +151,7 @@ MonoBehaviour:
   elementProgressionInterval: 3
   baseOrbitSpeed: 1
   nucleusScale: 1
-  electronScale: 1
+  electronScale: 0.2
   elementsPerRow: 10
   atomSpacing: 3
   protonMaterial: {fileID: 2100000, guid: 509ba2017177afcde8e55cf80d649bcc, type: 2}
