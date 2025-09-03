@@ -213,44 +213,17 @@ MonoBehaviour:
   proton: {fileID: 5225003289196216097, guid: 2339d4d5962500e29939849ee273f56b, type: 3}
   electron: {fileID: 5225003289196216097, guid: de8b546e54617d38e98353a50a76724e, type: 3}
   timer: 0
-  currentMaxAtomicNumber: 1
-  atomicNumber: 63
-  shellConfigurations:
-  - radius: 0.5
-    maxElectrons: 2
-    shellColor: {r: 1, g: 0, b: 0, a: 1}
-    showInGizmo: 1
-  - radius: 0.65
-    maxElectrons: 8
-    shellColor: {r: 0, g: 1, b: 0, a: 1}
-    showInGizmo: 1
-  - radius: 0.8
-    maxElectrons: 18
-    shellColor: {r: 0, g: 0, b: 1, a: 1}
-    showInGizmo: 1
-  - radius: 1
-    maxElectrons: 32
-    shellColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    showInGizmo: 1
-  - radius: 1.2
-    maxElectrons: 32
-    shellColor: {r: 1, g: 0, b: 1, a: 1}
-    showInGizmo: 1
-  - radius: 1.35
-    maxElectrons: 18
-    shellColor: {r: 0, g: 1, b: 1, a: 1}
-    showInGizmo: 1
-  - radius: 1.5
-    maxElectrons: 8
-    shellColor: {r: 1, g: 1, b: 1, a: 1}
-    showInGizmo: 1
-  showElectronOrbits: 1
-  showElectronPositions: 1
-  showNucleusParticles: 1
-  showShellLabels: 1
-  showElementInfo: 1
-  animateElectrons: 1
-  animationSpeed: 1
+  atomicNumber: 97
+  maxAtomicNumber: 118
+  maxPerShells: 02000000080000001200000020000000200000001200000008000000
+  shellRadius:
+  - 0.5
+  - 0.65
+  - 0.8
+  - 1
+  - 1.2
+  - 1.35
+  - 1.5
 --- !u!4 &1000530245
 Transform:
   m_ObjectHideFlags: 0

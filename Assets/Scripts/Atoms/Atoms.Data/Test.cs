@@ -58,9 +58,6 @@ namespace AtomicSimulation.Core
         public float BaseOrbitSpeed;
         public float NucleusScale;
         public float ElectronScale;
-        public int MaxAtomicNumber;
-        public int ElementsPerRow;
-        public float AtomSpacing;
         public float M;
         public float C;
         public Entity ProtonPrefab;

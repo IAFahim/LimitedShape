@@ -4,27 +4,13 @@ using UnityEngine;
 using Unity.Collections;
 
 #if UNITY_EDITOR
+using Unity.Mathematics;
 using UnityEditor;
 #endif
 
 namespace AtomicSimulation.Authoring
 {
     [System.Serializable]
-    public class ShellConfiguration
-    {
-        [Tooltip("Radius of this electron shell")]
-        public float radius = 0.5f;
-
-        [Tooltip("Maximum electrons this shell can hold")]
-        public int maxElectrons = 2;
-
-        [Tooltip("Color for visualizing this shell")]
-        public Color shellColor = Color.white;
-
-        [Tooltip("Whether to show this shell in gizmos")]
-        public bool showInGizmo = true;
-    }
-
     public class AtomicSimulationAuthoring : MonoBehaviour
     {
         [Header("Simulation Settings")] [Tooltip("Time in seconds between creating new elements")]
@@ -92,9 +78,6 @@ namespace AtomicSimulation.Authoring
                     BaseOrbitSpeed = authoring.baseOrbitSpeed,
                     NucleusScale = authoring.nucleusScale,
                     ElectronScale = authoring.electronScale,
-                    MaxAtomicNumber = 118,
-                    ElementsPerRow = authoring.elementsPerRow,
-                    AtomSpacing = authoring.atomSpacing,
                     NeutronPrefab = GetEntity(authoring.neutron, TransformUsageFlags.None),
                     ProtonPrefab = GetEntity(authoring.proton, TransformUsageFlags.None),
                     ElectronPrefab = GetEntity(authoring.electron, TransformUsageFlags.None),
@@ -128,8 +111,80 @@ namespace AtomicSimulation.Authoring
                 var blobReference = builder.CreateBlobAssetReference<ElectronShellData>(Allocator.Persistent);
                 AddComponent(entity, new ElectronShellBlob { BlobAssetRef = blobReference });
                 builder.Dispose();
-                
             }
         }
+        
+#if UNITY_EDITOR
+        /// <summary>
+        /// Draws gizmos in the editor to visualize the atom's structure.
+        /// This provides a static preview of the shells, nucleus, and initial electron positions.
+        /// The animation itself can only be seen in Play Mode.
+        /// </summary>
+        private void OnDrawGizmosSelected()
+        {
+            // Ensure we have valid data to work with
+            if (shellRadius == null || maxPerShells == null || shellRadius.Length == 0 || maxPerShells.Length == 0)
+            {
+                return;
+            }
+
+            var center = (float3)transform.position;
+
+            // --- 1. Draw Electron Shells and Electrons ---
+            int remainingElectrons = atomicNumber;
+            int shellNumber = 1;
+
+            while (remainingElectrons > 0 && shellNumber <= maxPerShells.Length)
+            {
+                int shellIndex = shellNumber - 1;
+                if (shellIndex >= shellRadius.Length) break; // Safety check
+
+                // The job multiplies shellNumber * shellRadius. We replicate that behavior here for consistency.
+                float radius = shellNumber * shellRadius[shellIndex];
+                
+                // Draw the shell orbit path (the "animation" path)
+                Gizmos.color = new Color(0f, 1f, 1f, 0.25f); // Cyan for shells
+                Gizmos.DrawWireSphere(center, radius);
+
+                // Calculate and draw electrons for this shell
+                int electronsInThisShell = Mathf.Min(remainingElectrons, maxPerShells[shellIndex]);
+                
+                for (int i = 0; i < electronsInThisShell; i++)
+                {
+                    // Use the static method from AtomicData to get the initial position
+                    AtomicData.ElectronInitialAngle(i, electronsInThisShell, center, radius, out _, out var orbitPos);
+
+                    Gizmos.color = Color.yellow;
+                    Gizmos.DrawSphere(orbitPos, electronScale);
+                }
+
+                remainingElectrons -= electronsInThisShell;
+                shellNumber++;
+            }
+
+            // --- 2. Draw Nucleus Particles ---
+            // Use the static methods from AtomicData to get particle counts
+            AtomicData.SimplifiedNeutronNucleusCount(atomicNumber, out var neutrons, out var totalParticles);
+            int protons = atomicNumber;
+
+            // Draw protons
+            Gizmos.color = new Color(1f, 0f, 0f, 0.75f); // Red for protons
+            for (int i = 0; i < protons; i++)
+            {
+                // Use the same logic to get the offset
+                AtomicData.GetNucleusParticleOffset(i, totalParticles, m, c, out var nucleusOffset);
+                Gizmos.DrawSphere((Vector3)center + (Vector3)nucleusOffset, nucleusScale);
+            }
+
+            // Draw neutrons
+            Gizmos.color = new Color(0.5f, 0.5f, 0.5f, 0.75f); // Gray for neutrons
+            for (int i = 0; i < neutrons; i++)
+            {
+                // The index for neutrons starts after the protons
+                AtomicData.GetNucleusParticleOffset(protons + i, totalParticles, m, c, out var nucleusOffset);
+                Gizmos.DrawSphere((Vector3)center + (Vector3)nucleusOffset, nucleusScale);
+            }
+        }
+#endif
     }
 }
