@@ -1,0 +1,19 @@
+:root {
+}
+
+.button {
+    border-left-color: rgb(115, 106, 104);
+    border-right-color: rgb(115, 106, 104);
+    border-top-color: rgb(115, 106, 104);
+    border-bottom-color: rgb(115, 106, 104);
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    background-color: rgb(245, 226, 193);
+    color: rgb(139, 99, 57);
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    border-bottom-left-radius: 16px;
+}
