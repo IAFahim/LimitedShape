@@ -97,22 +97,5 @@ namespace AtomicSimulation.Authoring
                 radius * math.cos(phi)
             );
         }
-        
-        public static void ElectronOrbitOffset(ref OrbitData orbitData, in float deltaTime, out float3 orbitOffset)
-        {
-            // Update orbit angle
-            orbitData.CurrentAngle += orbitData.Speed * deltaTime;
-
-            // Keep angle in valid range
-            if (orbitData.CurrentAngle > 2f * math.PI)
-                orbitData.CurrentAngle -= 2f * math.PI;
-
-            // Calculate new position
-            orbitOffset = new float3(
-                orbitData.Radius * math.cos(orbitData.CurrentAngle),
-                orbitData.Radius * math.sin(orbitData.CurrentAngle),
-                0f
-            );
-        }
     }
 }
