@@ -52,6 +52,7 @@ namespace AtomicSimulation.Authoring
         /// </summary>
         /// <param name="atomicNumber"></param>
         /// <returns></returns>
+        
         [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int SimplifiedNeutronCount(int atomicNumber)

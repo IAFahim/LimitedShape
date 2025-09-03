@@ -2,33 +2,17 @@ using AtomicSimulation.Core;
 using Unity.Entities;
 using UnityEngine;
 using Unity.Collections;
-
-#if UNITY_EDITOR
 using Unity.Mathematics;
-using UnityEditor;
-#endif
 
 namespace AtomicSimulation.Authoring
 {
     [System.Serializable]
     public class AtomicSimulationAuthoring : MonoBehaviour
     {
-        [Header("Simulation Settings")] [Tooltip("Time in seconds between creating new elements")]
-        public float elementProgressionInterval = 3f;
-
-        [Tooltip("Base orbital speed for electrons")]
-        public float baseOrbitSpeed = 1f;
-
         [Header("Visual Settings")] [Tooltip("Scale of nucleus particles (protons/neutrons)")]
         public float nucleusScale = 0.1f;
 
         [Tooltip("Scale of electrons")] public float electronScale = 0.05f;
-
-        [Header("Layout Settings")] [Tooltip("Number of atoms per row in the display grid")]
-        public int elementsPerRow = 10;
-
-        [Tooltip("Spacing between atoms in the grid")]
-        public float atomSpacing = 3f;
 
         public float m = 0.001f;
         public float c = 0.02f;
@@ -36,6 +20,9 @@ namespace AtomicSimulation.Authoring
         public GameObject neutron;
         public GameObject proton;
         public GameObject electron;
+        
+        [Tooltip("Base orbital speed for electrons")]
+        public float baseOrbitSpeed = 1f;
 
         [Header("Simulation")] public float timer = 0;
         [Range(1, 118)] public byte atomicNumber = 1;
@@ -65,6 +52,15 @@ namespace AtomicSimulation.Authoring
             1.5f // Q shell (n=7)
         };
 
+        [Header("Nucleus Physics")] public float nucleusAttractorStrength = 50f;
+
+        [Tooltip("Seconds until a neutron decays")]
+        public float neutronLifetime = 15f;
+
+        [Header("Electron PID Controller")] public float kp = 10f;
+        public float ki = 0.1f;
+        public float kd = 1f;
+
 
         public class AtomicSimulationBaker : Baker<AtomicSimulationAuthoring>
         {
@@ -74,13 +70,12 @@ namespace AtomicSimulation.Authoring
 
                 AddComponent(entity, new SimulationConfig
                 {
-                    ElementProgressionInterval = authoring.elementProgressionInterval,
-                    BaseOrbitSpeed = authoring.baseOrbitSpeed,
                     NucleusScale = authoring.nucleusScale,
                     ElectronScale = authoring.electronScale,
                     NeutronPrefab = GetEntity(authoring.neutron, TransformUsageFlags.None),
                     ProtonPrefab = GetEntity(authoring.proton, TransformUsageFlags.None),
                     ElectronPrefab = GetEntity(authoring.electron, TransformUsageFlags.None),
+                    BaseOrbitSpeed = authoring.baseOrbitSpeed,
                     M = authoring.m,
                     C = authoring.c,
                 });
@@ -96,8 +91,12 @@ namespace AtomicSimulation.Authoring
 
                 AddComponent<AtomReady>(entity);
                 SetComponentEnabled<AtomReady>(entity, false);
-                
+
                 BakeBlobs(authoring, entity);
+
+                AddComponent(entity, new NucleusAttractor { Strength = authoring.nucleusAttractorStrength });
+                AddComponent(entity, new NeutronDecay { Lifetime = authoring.neutronLifetime });
+                AddComponent(entity, new GameState { IsPlaying = true });
             }
 
             private void BakeBlobs(AtomicSimulationAuthoring authoring, Entity entity)
@@ -113,7 +112,7 @@ namespace AtomicSimulation.Authoring
                 builder.Dispose();
             }
         }
-        
+
 #if UNITY_EDITOR
         /// <summary>
         /// Draws gizmos in the editor to visualize the atom's structure.
@@ -141,14 +140,14 @@ namespace AtomicSimulation.Authoring
 
                 // The job multiplies shellNumber * shellRadius. We replicate that behavior here for consistency.
                 float radius = shellNumber * shellRadius[shellIndex];
-                
+
                 // Draw the shell orbit path (the "animation" path)
                 Gizmos.color = new Color(0f, 1f, 1f, 0.25f); // Cyan for shells
                 Gizmos.DrawWireSphere(center, radius);
 
                 // Calculate and draw electrons for this shell
                 int electronsInThisShell = Mathf.Min(remainingElectrons, maxPerShells[shellIndex]);
-                
+
                 for (int i = 0; i < electronsInThisShell; i++)
                 {
                     // Use the static method from AtomicData to get the initial position

@@ -9,14 +9,6 @@ using Unity.Transforms;
 
 namespace AtomicSimulation.Core
 {
-    public struct AtomicNumber : IComponentData
-    {
-        public byte Value;
-    }
-
-    public struct AtomReady : IComponentData, IEnableableComponent
-    {
-    }
 
     public struct OrbitData : IComponentData
     {
@@ -25,20 +17,7 @@ namespace AtomicSimulation.Core
         public float CurrentAngle;
         public int ShellNumber; // K=1, L=2, M=3, etc.
     }
-
-    public struct AtomCenter : IComponentData
-    {
-        public float3 Position;
-    }
-
-    public struct NucleusParticle : IComponentData, IEnableableComponent
-    {
-        public float3 LocalOffset;
-    }
-
-    public struct ElectronParticle : IComponentData, IEnableableComponent
-    {
-    }
+    
 
     public struct ElectronShellData
     {
@@ -50,12 +29,52 @@ namespace AtomicSimulation.Core
     {
         public BlobAssetReference<ElectronShellData> BlobAssetRef;
     }
+    
+    public struct AtomicNumber : IComponentData { public byte Value; }
+    public struct AtomCenter : IComponentData { public float3 Position; }
+    public struct AtomReady : IComponentData, IEnableableComponent { }
+
+    // --- PARTICLE TAGS ---
+    public struct Proton : IComponentData { }
+    public struct Neutron : IComponentData { }
+    public struct Electron : IComponentData { }
+
+    public struct PID : IComponentData
+    {
+        // PID parameters
+        public float Kp; // Proportional gain
+        public float Ki; // Integral gain
+        public float Kd; // Derivative gain
+        // PID state
+        public float Integral;
+        public float PreviousError;
+    }
+
+    public struct NucleusAttractor : IComponentData
+    {
+        public float Strength;
+    }
+    
+    public struct ElectronOrbitController : IComponentData
+    {
+        public float TargetRadius;
+        public float TargetSpeed;
+        
+    }
+
+    public struct NeutronDecay : IComponentData
+    {
+        public float Lifetime;
+    }
+
+    public struct GameState : IComponentData
+    {
+        public bool IsPlaying;
+    }
 
     // Singleton component for simulation control
     public struct SimulationConfig : IComponentData
     {
-        public float ElementProgressionInterval;
-        public float BaseOrbitSpeed;
         public float NucleusScale;
         public float ElectronScale;
         public float M;
@@ -63,6 +82,7 @@ namespace AtomicSimulation.Core
         public Entity ProtonPrefab;
         public Entity NeutronPrefab;
         public Entity ElectronPrefab;
+        public float BaseOrbitSpeed;
     }
 
     public struct SimulationTimer : IComponentData
@@ -118,7 +138,7 @@ public partial struct CreateAtomJob : IJobEntity
                     Config.NucleusScale
                 )
             );
-            ECB.AddComponent(chunkIndex, protonEntity, new NucleusParticle { LocalOffset = nucleusOffset });
+            ECB.AddComponent(chunkIndex, protonEntity, new Proton());
             ECB.AddComponent(chunkIndex, protonEntity, new AtomCenter { Position = centerPos });
         }
 
@@ -135,7 +155,7 @@ public partial struct CreateAtomJob : IJobEntity
                     Config.NucleusScale
                 )
             );
-            ECB.AddComponent(chunkIndex, neutronEntity, new NucleusParticle { LocalOffset = nucleusOffset });
+            ECB.AddComponent(chunkIndex, neutronEntity, new Neutron());
             ECB.AddComponent(chunkIndex, neutronEntity, new AtomCenter { Position = centerPos });
         }
     }
@@ -165,7 +185,7 @@ public partial struct CreateAtomJob : IJobEntity
                 var electronEntity = ECB.Instantiate(chunkIndex, Config.ElectronPrefab);
                 ECB.AddComponent(chunkIndex, electronEntity, LocalTransform.FromPositionRotationScale(
                     orbitPos, quaternion.identity, Config.ElectronScale));
-                ECB.AddComponent(chunkIndex, electronEntity, new ElectronParticle());
+                ECB.AddComponent(chunkIndex, electronEntity, new Electron());
                 ECB.AddComponent(chunkIndex, electronEntity, new OrbitData
                 {
                     Radius = shellRadius,
@@ -187,7 +207,7 @@ namespace AtomicSimulation.Core
 {
     [BurstCompile]
     [UpdateInGroup(typeof(SimulationSystemGroup))]
-    [WithPresent(typeof(ElectronParticle))]
+    [WithPresent(typeof(Electron))]
     public partial struct ElectronOrbitSystem : ISystem
     {
         [BurstCompile]

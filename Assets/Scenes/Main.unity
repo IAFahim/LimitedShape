@@ -172,7 +172,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1000530243
+--- !u!1 &751293873
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -180,8 +180,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1000530245}
-  - component: {fileID: 1000530244}
+  - component: {fileID: 751293875}
+  - component: {fileID: 751293874}
   m_Layer: 0
   m_Name: Config
   m_TagString: Untagged
@@ -189,13 +189,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1000530244
+--- !u!114 &751293874
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000530243}
+  m_GameObject: {fileID: 751293873}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50c18678887c4cd9b1106a95f889215c, type: 3}
@@ -204,7 +204,7 @@ MonoBehaviour:
   elementProgressionInterval: 3
   baseOrbitSpeed: 1
   nucleusScale: 0.1
-  electronScale: 0.2
+  electronScale: 0.05
   elementsPerRow: 10
   atomSpacing: 3
   m: 0.001
@@ -224,13 +224,18 @@ MonoBehaviour:
   - 1.2
   - 1.35
   - 1.5
---- !u!4 &1000530245
+  nucleusAttractorStrength: 50
+  neutronLifetime: 15
+  Kp: 10
+  Ki: 0.1
+  Kd: 1
+--- !u!4 &751293875
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000530243}
+  m_GameObject: {fileID: 751293873}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -324,4 +329,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 521777701}
   - {fileID: 1309643624}
-  - {fileID: 1000530245}
+  - {fileID: 751293875}
