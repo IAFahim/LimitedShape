@@ -1,4 +1,5 @@
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace AtomicSimulation.Core
@@ -10,8 +11,8 @@ namespace AtomicSimulation.Core
         public float kd;
         
         // PID state
-        public float integral;
-        public float previousError;
+        public float3 integral;
+        public float3 previousError;
 
         public class PidBaker : Baker<PidAuthoring>
         {

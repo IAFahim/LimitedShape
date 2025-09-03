@@ -52,14 +52,7 @@ namespace AtomicSimulation.Authoring
             1.5f // Q shell (n=7)
         };
 
-        [Header("Nucleus Physics")] public float nucleusAttractorStrength = 50f;
-
-        [Tooltip("Seconds until a neutron decays")]
-        public float neutronLifetime = 15f;
-
-        [Header("Electron PID Controller")] public float kp = 10f;
-        public float ki = 0.1f;
-        public float kd = 1f;
+        public float forceFieldStrength = 10;
 
 
         public class AtomicSimulationBaker : Baker<AtomicSimulationAuthoring>
@@ -94,8 +87,7 @@ namespace AtomicSimulation.Authoring
 
                 BakeBlobs(authoring, entity);
 
-                AddComponent(entity, new NucleusAttractor { Strength = authoring.nucleusAttractorStrength });
-                AddComponent(entity, new NeutronDecay { Lifetime = authoring.neutronLifetime });
+
                 AddComponent(entity, new GameState { IsPlaying = true });
             }
 

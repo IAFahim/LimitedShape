@@ -46,26 +46,11 @@ namespace AtomicSimulation.Core
         public float Ki; // Integral gain
         public float Kd; // Derivative gain
         // PID state
-        public float Integral;
-        public float PreviousError;
+        public float3 Integral;
+        public float3 PreviousError;
     }
 
-    public struct NucleusAttractor : IComponentData
-    {
-        public float Strength;
-    }
-    
-    public struct ElectronOrbitController : IComponentData
-    {
-        public float TargetRadius;
-        public float TargetSpeed;
-        
-    }
 
-    public struct NeutronDecay : IComponentData
-    {
-        public float Lifetime;
-    }
 
     public struct GameState : IComponentData
     {

@@ -205,19 +205,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50c18678887c4cd9b1106a95f889215c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Atoms.Data::AtomicSimulation.Authoring.AtomicSimulationAuthoring
-  elementProgressionInterval: 3
-  baseOrbitSpeed: 1
   nucleusScale: 0.1
   electronScale: 0.05
-  elementsPerRow: 10
-  atomSpacing: 3
   m: 0.001
   c: 0.02
   neutron: {fileID: 5225003289196216097, guid: 89ec63cf6ffe6863b9d997f34d49e25d, type: 3}
   proton: {fileID: 5225003289196216097, guid: 2339d4d5962500e29939849ee273f56b, type: 3}
   electron: {fileID: 5225003289196216097, guid: de8b546e54617d38e98353a50a76724e, type: 3}
+  baseOrbitSpeed: 1
   timer: 0
-  atomicNumber: 97
+  atomicNumber: 58
   maxAtomicNumber: 118
   maxPerShells: 02000000080000001200000020000000200000001200000008000000
   shellRadius:
@@ -228,11 +225,7 @@ MonoBehaviour:
   - 1.2
   - 1.35
   - 1.5
-  nucleusAttractorStrength: 50
-  neutronLifetime: 15
-  Kp: 10
-  Ki: 0.1
-  Kd: 1
+  forceFieldStrength: 10
 --- !u!4 &1115184488
 Transform:
   m_ObjectHideFlags: 0
