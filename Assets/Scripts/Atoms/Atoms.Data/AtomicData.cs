@@ -27,8 +27,8 @@ namespace AtomicSimulation.Authoring
             "Nihonium", "Flerovium", "Moscovium", "Livermorium", "Tennessine", "Oganesson"
         };
 
-        
-        public static readonly FixedList128Bytes<int> MaxElectronsPerShell = new()
+
+        public static readonly FixedList32Bytes<int> MaxElectronsPerShell = new()
         {
             Length = 7,
             [0] = 2, // K shell
@@ -39,6 +39,19 @@ namespace AtomicSimulation.Authoring
             [5] = 18, // P shell
             [6] = 8 // Q shell
         };
+
+        public static readonly FixedList32Bytes<float> ShellRadius = new()
+        {
+            Length = 7,
+            [0] = 0.53f,   // K shell (n=1, Bohr radius for hydrogen)
+            [1] = 2.12f,   // L shell (n=2)
+            [2] = 4.77f,   // M shell (n=3)
+            [3] = 8.48f,   // N shell (n=4)
+            [4] = 13.25f,  // O shell (n=5)
+            [5] = 19.08f,  // P shell (n=6)
+            [6] = 25.97f   // Q shell (n=7)
+        };
+
 
         [BurstCompile]
         public static void ElectronInitialAngle(
@@ -83,11 +96,12 @@ namespace AtomicSimulation.Authoring
         }
 
         [BurstCompile]
-        public static void GetNucleusParticleOffset(int particleIndex, int totalParticles, out float3 nucleusOffset)
+        public static void GetNucleusParticleOffset(int particleIndex, int totalParticles, float c, float m,
+            out float3 nucleusOffset)
         {
             if (totalParticles == 1) nucleusOffset = float3.zero;
 
-            float radius = 0.02f + (totalParticles * 0.001f);
+            float radius = c + (totalParticles * m);
 
             // Golden spiral distribution for roughly uniform sphere packing
             float goldenAngle = 2.39996322972865332f;

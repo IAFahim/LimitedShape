@@ -1,25 +1,8 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Ui%20Tookit/uss/button.uss?fileID=7433441132597879392&amp;guid=4762eba34b487ae418323bf3f17f0fe2&amp;type=3#button" />
-    <ui:VisualElement style="flex-grow: 1; margin-top: 8px; margin-right: 8px; margin-bottom: 8px; margin-left: 8px;">
-        <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
-            <ui:VisualElement style="flex-grow: 1;">
-                <ui:VisualElement style="flex-grow: 1; flex-direction: row; background-color: rgb(153, 153, 153);">
-                    <ui:VisualElement style="flex-grow: 1;" />
-                    <Unity.AppUI.UI.Text style="flex-grow: 1;" />
-                </ui:VisualElement>
-            </ui:VisualElement>
-            <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1;" />
-            <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: flex-end;">
-                <ui:Button text="Button" />
-                <ui:Button text="Button" />
-            </ui:VisualElement>
-        </ui:VisualElement>
+    <ui:VisualElement style="flex-grow: 1; margin-top: 4px; margin-right: 4px; margin-bottom: 4px; margin-left: 4px; flex-direction: row; justify-content: space-between; align-items: stretch;">
+        <ui:VisualElement style="flex-grow: 1;" />
         <ui:VisualElement picking-mode="Ignore" style="flex-grow: 5;" />
-        <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: space-around; align-self: stretch; align-items: center;">
-            <ui:Button text="Upgrade" style="border-left-color: rgb(115, 106, 104); border-right-color: rgb(115, 106, 104); border-top-color: rgb(115, 106, 104); border-bottom-color: rgb(115, 106, 104); border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; background-color: rgb(245, 226, 193); color: rgb(139, 99, 57); border-top-left-radius: 16px; border-top-right-radius: 16px; border-bottom-right-radius: 16px; border-bottom-left-radius: 16px; margin-left: 2px; margin-right: 2px; padding-right: 8px; padding-top: 8px; padding-left: 8px; padding-bottom: 8px; height: 64px; width: 64px;">
-                <ui:VisualElement style="flex-grow: 1;" />
-            </ui:Button>
-            <ui:Button text="Upgrade" class="button" />
-        </ui:VisualElement>
+        <ui:ListView virtualization-method="DynamicHeight" show-border="true" item-template="project://database/Assets/Ui%20Tookit/PowerUps.uxml?fileID=9197481963319205126&amp;guid=ea748369c085d51c2a4659c126039f95&amp;type=3#PowerUps" />
     </ui:VisualElement>
 </ui:UXML>

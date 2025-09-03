@@ -49,9 +49,12 @@ namespace AtomicSimulation.Core
         public int MaxAtomicNumber;
         public int ElementsPerRow;
         public float AtomSpacing;
+        public float M;
+        public float C;
         public Entity ProtonPrefab;
         public Entity NeutronPrefab;
         public Entity ElectronPrefab;
+        
     }
 
     public struct SimulationTimer : IComponentData
@@ -66,7 +69,6 @@ namespace AtomicSimulation.Core
 public partial struct CreateAtomJob : IJobEntity
 {
     public EntityCommandBuffer.ParallelWriter ECB;
-    [ReadOnly] public FixedList128Bytes<int> MaxElectronsPerShell;
     [ReadOnly] public SimulationConfig Config;
 
     [BurstCompile]
@@ -76,14 +78,14 @@ public partial struct CreateAtomJob : IJobEntity
         in AtomCenter center
     )
     {
-        CreateNucleus(chunkIndex, atomicNumber.Value, center.Position);
+        CreateNucleus(chunkIndex, atomicNumber.Value, center.Position, Config.M, Config.C);
         CreateElectronShells(chunkIndex, atomicNumber.Value, center.Position);
 
         ECB.RemoveComponent<NeedsAtomSetup>(chunkIndex, entity);
     }
 
     [BurstCompile]
-    private void CreateNucleus(int chunkIndex, int atomicNumber, float3 centerPos)
+    private void CreateNucleus(int chunkIndex, int atomicNumber, float3 centerPos, float m, float c)
     {
         AtomicData.SimplifiedNeutronNucleusCount(atomicNumber, out var neutrons, out var nucleus);
 
@@ -91,7 +93,7 @@ public partial struct CreateAtomJob : IJobEntity
         for (int i = 0; i < atomicNumber; i++)
         {
             var protonEntity = ECB.Instantiate(chunkIndex, Config.ProtonPrefab);
-            AtomicData.GetNucleusParticleOffset(i, nucleus, out var nucleusOffset);
+            AtomicData.GetNucleusParticleOffset(i, nucleus, m, c, out var nucleusOffset);
 
             ECB.AddComponent(chunkIndex, protonEntity,
                 LocalTransform.FromPositionRotationScale(
@@ -108,7 +110,7 @@ public partial struct CreateAtomJob : IJobEntity
         for (int i = 0; i < neutrons; i++)
         {
             var neutronEntity = ECB.Instantiate(chunkIndex, Config.NeutronPrefab);
-            AtomicData.GetNucleusParticleOffset(atomicNumber + i, nucleus, out var nucleusOffset);
+            AtomicData.GetNucleusParticleOffset(atomicNumber + i, nucleus,m, c, out var nucleusOffset);
 
             ECB.AddComponent(chunkIndex, neutronEntity,
                 LocalTransform.FromPositionRotationScale(
@@ -128,10 +130,11 @@ public partial struct CreateAtomJob : IJobEntity
         int remainingElectrons = atomicNumber;
         int shellNumber = 1;
 
-        while (remainingElectrons > 0 && shellNumber <= MaxElectronsPerShell.Length)
+        while (remainingElectrons > 0 && shellNumber <= AtomicData.MaxElectronsPerShell.Length)
         {
-            int electronsInShell = math.min(remainingElectrons, MaxElectronsPerShell[shellNumber - 1]);
-            float shellRadius = shellNumber * 0.5f;
+            var shellIndex = shellNumber - 1;
+            int electronsInShell = math.min(remainingElectrons, AtomicData.MaxElectronsPerShell[shellIndex]);
+            float shellRadius = shellNumber * AtomicData.ShellRadius[shellIndex];
             float shellSpeed = Config.BaseOrbitSpeed / shellRadius; // Inner shells orbit faster
 
             for (int electronIndex = 0; electronIndex < electronsInShell; electronIndex++)
@@ -240,7 +243,6 @@ namespace AtomicSimulation.Core
                 var createAtomJob = new CreateAtomJob
                 {
                     ECB = ecb.AsParallelWriter(),
-                    MaxElectronsPerShell = AtomicData.MaxElectronsPerShell,
                     Config = SystemAPI.GetSingleton<SimulationConfig>()
                 };
 
@@ -288,11 +290,9 @@ namespace AtomicSimulation.Core
     [BurstCompile]
     public partial struct SimulationBootstrapSystem : ISystem
     {
-
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-
             // Create simulation timer singleton  
             var timerEntity = state.EntityManager.CreateEntity();
             state.EntityManager.AddComponentData(timerEntity, new SimulationTimer
@@ -313,7 +313,6 @@ namespace AtomicSimulation.Core
             var createAtomJob = new CreateAtomJob
             {
                 ECB = ecb.AsParallelWriter(),
-                MaxElectronsPerShell = AtomicData.MaxElectronsPerShell,
                 Config = config
             };
 

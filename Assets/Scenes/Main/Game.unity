@@ -154,9 +154,9 @@ MonoBehaviour:
   electronScale: 0.2
   elementsPerRow: 10
   atomSpacing: 3
-  protonMaterial: {fileID: 2100000, guid: 509ba2017177afcde8e55cf80d649bcc, type: 2}
-  neutronMaterial: {fileID: 2100000, guid: 509ba2017177afcde8e55cf80d649bcc, type: 2}
-  electronMaterial: {fileID: 2100000, guid: 509ba2017177afcde8e55cf80d649bcc, type: 2}
+  m: 0.001
+  c: 0.02
+  shellRadius: 1
   neutron: {fileID: 5225003289196216097, guid: 89ec63cf6ffe6863b9d997f34d49e25d, type: 3}
   proton: {fileID: 5225003289196216097, guid: 2339d4d5962500e29939849ee273f56b, type: 3}
   electron: {fileID: 5225003289196216097, guid: de8b546e54617d38e98353a50a76724e, type: 3}
