@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using AtomicSimulation.Core;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -26,32 +27,6 @@ namespace AtomicSimulation.Authoring
             "Californium", "Einsteinium", "Fermium", "Mendelevium", "Nobelium", "Lawrencium", "Rutherfordium",
             "Dubnium", "Seaborgium", "Bohrium", "Hassium", "Meitnerium", "Darmstadtium", "Roentgenium", "Copernicium",
             "Nihonium", "Flerovium", "Moscovium", "Livermorium", "Tennessine", "Oganesson"
-        };
-
-
-        public static readonly FixedList32Bytes<int> MaxElectronsPerShell = new()
-        {
-            Length = 7,
-            [0] = 2, // K shell
-            [1] = 8, // L shell  
-            [2] = 18, // M shell
-            [3] = 32, // N shell
-            [4] = 32, // O shell
-            [5] = 18, // P shell
-            [6] = 8 // Q shell
-        };
-
-        // don't change we need this scale to gamify
-        public static readonly FixedList32Bytes<float> ShellRadius = new()
-        {
-            Length = 7,
-            [0] = 0.5f, // K shell (n=1, Bohr radius for hydrogen)
-            [1] = .65f, // L shell (n=2)
-            [2] = 0.8f, // M shell (n=3)
-            [3] = 1.0f, // N shell (n=4)
-            [4] = 1.2f, // O shell (n=5)
-            [5] = 1.35f, // P shell (n=6)
-            [6] = 1.5f // Q shell (n=7)
         };
 
 
@@ -119,6 +94,23 @@ namespace AtomicSimulation.Authoring
                 radius * math.sin(phi) * math.cos(theta),
                 radius * math.sin(phi) * math.sin(theta),
                 radius * math.cos(phi)
+            );
+        }
+        
+        public static void ElectronOrbitOffset(ref OrbitData orbitData, in float deltaTime, out float3 orbitOffset)
+        {
+            // Update orbit angle
+            orbitData.CurrentAngle += orbitData.Speed * deltaTime;
+
+            // Keep angle in valid range
+            if (orbitData.CurrentAngle > 2f * math.PI)
+                orbitData.CurrentAngle -= 2f * math.PI;
+
+            // Calculate new position
+            orbitOffset = new float3(
+                orbitData.Radius * math.cos(orbitData.CurrentAngle),
+                orbitData.Radius * math.sin(orbitData.CurrentAngle),
+                0f
             );
         }
     }

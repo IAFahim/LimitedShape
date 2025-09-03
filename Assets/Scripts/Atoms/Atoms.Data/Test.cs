@@ -40,6 +40,17 @@ namespace AtomicSimulation.Core
     {
     }
 
+    public struct ElectronShellData
+    {
+        public BlobArray<int> MaxPerShells;
+        public BlobArray<float> ShellRadii;
+    }
+
+    public struct ElectronShellBlob : IComponentData
+    {
+        public BlobAssetReference<ElectronShellData> BlobAssetRef;
+    }
+
     // Singleton component for simulation control
     public struct SimulationConfig : IComponentData
     {
@@ -70,6 +81,8 @@ public partial struct CreateAtomJob : IJobEntity
 {
     public EntityCommandBuffer.ParallelWriter ECB;
     [ReadOnly] public SimulationConfig Config;
+    [ReadOnly] public BlobAssetReference<ElectronShellData> BlobAssetRef;
+
 
     [BurstCompile]
     private void Execute(
@@ -83,6 +96,7 @@ public partial struct CreateAtomJob : IJobEntity
         {
             return;
         }
+
         CreateNucleus(chunkIndex, atomicNumber.Value, center.Position, Config.M, Config.C);
         CreateElectronShells(chunkIndex, atomicNumber.Value, center.Position);
         atomReady.ValueRW = true;
@@ -136,11 +150,14 @@ public partial struct CreateAtomJob : IJobEntity
         int remainingElectrons = atomicNumber;
         int shellNumber = 1;
 
-        while (remainingElectrons > 0 && shellNumber <= AtomicData.MaxElectronsPerShell.Length)
+        ref var maxPerShells = ref BlobAssetRef.Value.MaxPerShells;
+        var maxShellArrayLength = maxPerShells.Length;
+        ref var shellRadii = ref BlobAssetRef.Value.ShellRadii;
+        while (remainingElectrons > 0 && shellNumber <= maxShellArrayLength)
         {
             var shellIndex = shellNumber - 1;
-            int electronsInShell = math.min(remainingElectrons, AtomicData.MaxElectronsPerShell[shellIndex]);
-            float shellRadius = shellNumber * AtomicData.ShellRadius[shellIndex];
+            int electronsInShell = math.min(remainingElectrons, maxPerShells[shellIndex]);
+            float shellRadius = shellNumber * shellRadii[shellIndex];
             float shellSpeed = Config.BaseOrbitSpeed / shellRadius; // Inner shells orbit faster
 
             for (int electronIndex = 0; electronIndex < electronsInShell; electronIndex++)
@@ -199,20 +216,7 @@ namespace AtomicSimulation.Core
                 in AtomCenter atomCenter
             )
             {
-                // Update orbit angle
-                orbitData.CurrentAngle += orbitData.Speed * DeltaTime;
-
-                // Keep angle in valid range
-                if (orbitData.CurrentAngle > 2f * math.PI)
-                    orbitData.CurrentAngle -= 2f * math.PI;
-
-                // Calculate new position
-                float3 orbitOffset = new float3(
-                    orbitData.Radius * math.cos(orbitData.CurrentAngle),
-                    orbitData.Radius * math.sin(orbitData.CurrentAngle),
-                    0f
-                );
-
+                AtomicData.ElectronOrbitOffset(ref orbitData, DeltaTime, out var orbitOffset);
                 transform.Position = atomCenter.Position + orbitOffset;
             }
         }
@@ -220,100 +224,25 @@ namespace AtomicSimulation.Core
 }
 
 
-// namespace AtomicSimulation.Core
-// {
-//     [BurstCompile]
-//     [UpdateInGroup(typeof(SimulationSystemGroup))]
-//     [UpdateAfter(typeof(ElectronOrbitSystem))]
-//     public partial struct ElementProgressionSystem : ISystem
-//     {
-//         [BurstCompile]
-//         public void OnUpdate(ref SystemState state)
-//         {
-//             var config = SystemAPI.GetSingleton<SimulationConfig>();
-//             var timerRW = SystemAPI.GetSingletonRW<SimulationTimer>();
-//
-//             ref var timer = ref timerRW.ValueRW;
-//             timer.Timer += SystemAPI.Time.DeltaTime;
-//
-//             if (timer.Timer >= config.ElementProgressionInterval &&
-//                 timer.CurrentMaxAtomicNumber < config.MaxAtomicNumber)
-//             {
-//                 timer.Timer = 0f;
-//                 timer.CurrentMaxAtomicNumber++;
-//
-//                 CreateNextElement(ref state, timer.CurrentMaxAtomicNumber, config);
-//                 var ecb = new EntityCommandBuffer(Allocator.TempJob);
-//
-//                 // Process new atoms that need to be created
-//                 var createAtomJob = new CreateAtomJob
-//                 {
-//                     ECB = ecb.AsParallelWriter(),
-//                     Config = SystemAPI.GetSingleton<SimulationConfig>()
-//                 };
-//
-//                 state.Dependency = createAtomJob.ScheduleParallel(state.Dependency);
-//                 state.Dependency.Complete();
-//
-//                 ecb.Playback(state.EntityManager);
-//                 ecb.Dispose();
-//
-//                 // Log element creation (only in development builds)
-// #if DEVELOPMENT_BUILD || UNITY_EDITOR
-//                 if (timer.CurrentMaxAtomicNumber <= AtomicData.ElementNames.Length)
-//                 {
-//                     UnityEngine.Debug.Log(
-//                         $"Created {AtomicData.ElementNames[timer.CurrentMaxAtomicNumber - 1]} (Z={timer.CurrentMaxAtomicNumber})");
-//                 }
-// #endif
-//             }
-//         }
-//
-//         [BurstCompile]
-//         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-//         private void CreateNextElement(ref SystemState state, int atomicNumber, in SimulationConfig config)
-//         {
-//             // Calculate grid position
-//             int row = (atomicNumber - 1) / config.ElementsPerRow;
-//             int col = (atomicNumber - 1) % config.ElementsPerRow;
-//
-//             float3 position = new float3(
-//                 col * config.AtomSpacing,
-//                 -row * config.AtomSpacing,
-//                 0f
-//             );
-//
-//             var atomEntity = state.EntityManager.CreateEntity();
-//             state.EntityManager.AddComponentData(atomEntity, new AtomicNumber { Value = atomicNumber });
-//             state.EntityManager.AddComponentData(atomEntity, new AtomCenter { Position = position });
-//         }
-//     }
-// }
-
-
-namespace AtomicSimulation.Core
+[BurstCompile]
+public partial struct SimulationBootstrapSystem : ISystem
 {
     [BurstCompile]
-    public partial struct SimulationBootstrapSystem : ISystem
+    public void OnUpdate(ref SystemState state)
     {
-        [BurstCompile]
-        public void OnUpdate(ref SystemState state)
+        var config = SystemAPI.GetSingleton<SimulationConfig>();
+        var electronShellBlob = SystemAPI.GetSingleton<ElectronShellBlob>();
+        var ecb = new EntityCommandBuffer(Allocator.TempJob);
+        var createAtomJob = new CreateAtomJob
         {
-            var config = SystemAPI.GetSingleton<SimulationConfig>();
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
-
-            var createAtomJob = new CreateAtomJob
-            {
-                ECB = ecb.AsParallelWriter(),
-                Config = config
-            };
-
-            state.Dependency = createAtomJob.ScheduleParallel(state.Dependency);
-            state.Dependency.Complete();
-
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
-            state.Enabled = false;
-        }
+            ECB = ecb.AsParallelWriter(),
+            Config = config,
+            BlobAssetRef = electronShellBlob.BlobAssetRef
+        };
+        state.Dependency = createAtomJob.ScheduleParallel(state.Dependency);
+        state.Dependency.Complete();
+        ecb.Playback(state.EntityManager);
+        ecb.Dispose();
+        state.Enabled = false;
     }
 }
