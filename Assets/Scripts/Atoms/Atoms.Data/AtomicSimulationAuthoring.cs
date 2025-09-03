@@ -1,4 +1,6 @@
+using AtomicSimulation.Core;
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace AtomicSimulation.Authoring
@@ -28,7 +30,13 @@ namespace AtomicSimulation.Authoring
         public GameObject neutron;
         public GameObject proton;
         public GameObject electron;
-        
+
+
+        [Header("Simulation")] public float timer = 0;
+        public int currentMaxAtomicNumber = 1;
+
+        [Header("Atom")] public byte atomicNumber=1;
+
 
         public class AtomicSimulationBaker : Baker<AtomicSimulationAuthoring>
         {
@@ -48,9 +56,21 @@ namespace AtomicSimulation.Authoring
                     NeutronPrefab = GetEntity(authoring.neutron, TransformUsageFlags.None),
                     ProtonPrefab = GetEntity(authoring.proton, TransformUsageFlags.None),
                     ElectronPrefab = GetEntity(authoring.electron, TransformUsageFlags.None),
-                    C = authoring.c,
                     M = authoring.m,
+                    C = authoring.c,
                 });
+
+                AddComponent(entity, new SimulationTimer
+                    {
+                        Timer = authoring.timer, CurrentMaxAtomicNumber = authoring.currentMaxAtomicNumber
+                    }
+                );
+
+                AddComponent(entity, new AtomicNumber { Value = authoring.atomicNumber });
+                AddComponent(entity, new AtomCenter { Position = authoring.transform.position });
+                
+                AddComponent<AtomReady>(entity);
+                SetComponentEnabled<AtomReady>(entity, false);
             }
         }
     }

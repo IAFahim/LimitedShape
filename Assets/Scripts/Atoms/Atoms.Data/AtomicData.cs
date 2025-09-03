@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -40,20 +41,22 @@ namespace AtomicSimulation.Authoring
             [6] = 8 // Q shell
         };
 
+        // don't change we need this scale to gamify
         public static readonly FixedList32Bytes<float> ShellRadius = new()
         {
             Length = 7,
-            [0] = 0.53f,   // K shell (n=1, Bohr radius for hydrogen)
-            [1] = 2.12f,   // L shell (n=2)
-            [2] = 4.77f,   // M shell (n=3)
-            [3] = 8.48f,   // N shell (n=4)
-            [4] = 13.25f,  // O shell (n=5)
-            [5] = 19.08f,  // P shell (n=6)
-            [6] = 25.97f   // Q shell (n=7)
+            [0] = 0.5f, // K shell (n=1, Bohr radius for hydrogen)
+            [1] = .65f, // L shell (n=2)
+            [2] = 0.8f, // M shell (n=3)
+            [3] = 1.0f, // N shell (n=4)
+            [4] = 1.2f, // O shell (n=5)
+            [5] = 1.35f, // P shell (n=6)
+            [6] = 1.5f // Q shell (n=7)
         };
 
 
         [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void ElectronInitialAngle(
             int electronIndex, int electronsInShell,
             float3 centerPos, float shellRadius,
@@ -75,6 +78,7 @@ namespace AtomicSimulation.Authoring
         /// <param name="atomicNumber"></param>
         /// <returns></returns>
         [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int SimplifiedNeutronCount(int atomicNumber)
         {
             if (atomicNumber <= 2) return math.max(0, atomicNumber - 1);
@@ -96,8 +100,11 @@ namespace AtomicSimulation.Authoring
         }
 
         [BurstCompile]
-        public static void GetNucleusParticleOffset(int particleIndex, int totalParticles, float c, float m,
-            out float3 nucleusOffset)
+        public static void GetNucleusParticleOffset(
+            int particleIndex, int totalParticles,
+            float m, float c,
+            out float3 nucleusOffset
+        )
         {
             if (totalParticles == 1) nucleusOffset = float3.zero;
 

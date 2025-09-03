@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using AtomicSimulation.Authoring;
 using AtomicSimulation.Core;
 using Unity.Burst;
@@ -10,7 +11,11 @@ namespace AtomicSimulation.Core
 {
     public struct AtomicNumber : IComponentData
     {
-        public int Value;
+        public byte Value;
+    }
+
+    public struct AtomReady : IComponentData, IEnableableComponent
+    {
     }
 
     public struct OrbitData : IComponentData
@@ -35,10 +40,6 @@ namespace AtomicSimulation.Core
     {
     }
 
-    public struct NeedsAtomSetup : IComponentData
-    {
-    }
-
     // Singleton component for simulation control
     public struct SimulationConfig : IComponentData
     {
@@ -54,7 +55,6 @@ namespace AtomicSimulation.Core
         public Entity ProtonPrefab;
         public Entity NeutronPrefab;
         public Entity ElectronPrefab;
-        
     }
 
     public struct SimulationTimer : IComponentData
@@ -65,7 +65,7 @@ namespace AtomicSimulation.Core
 }
 
 [BurstCompile]
-[WithPresent(typeof(NeedsAtomSetup))]
+[WithPresent(typeof(AtomReady))]
 public partial struct CreateAtomJob : IJobEntity
 {
     public EntityCommandBuffer.ParallelWriter ECB;
@@ -73,18 +73,23 @@ public partial struct CreateAtomJob : IJobEntity
 
     [BurstCompile]
     private void Execute(
-        [ChunkIndexInQuery] int chunkIndex, Entity entity,
+        [ChunkIndexInQuery] int chunkIndex,
         in AtomicNumber atomicNumber,
-        in AtomCenter center
+        in AtomCenter center,
+        EnabledRefRW<AtomReady> atomReady
     )
     {
+        if (atomReady.ValueRO)
+        {
+            return;
+        }
         CreateNucleus(chunkIndex, atomicNumber.Value, center.Position, Config.M, Config.C);
         CreateElectronShells(chunkIndex, atomicNumber.Value, center.Position);
-
-        ECB.RemoveComponent<NeedsAtomSetup>(chunkIndex, entity);
+        atomReady.ValueRW = true;
     }
 
     [BurstCompile]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void CreateNucleus(int chunkIndex, int atomicNumber, float3 centerPos, float m, float c)
     {
         AtomicData.SimplifiedNeutronNucleusCount(atomicNumber, out var neutrons, out var nucleus);
@@ -110,7 +115,7 @@ public partial struct CreateAtomJob : IJobEntity
         for (int i = 0; i < neutrons; i++)
         {
             var neutronEntity = ECB.Instantiate(chunkIndex, Config.NeutronPrefab);
-            AtomicData.GetNucleusParticleOffset(atomicNumber + i, nucleus,m, c, out var nucleusOffset);
+            AtomicData.GetNucleusParticleOffset(atomicNumber + i, nucleus, m, c, out var nucleusOffset);
 
             ECB.AddComponent(chunkIndex, neutronEntity,
                 LocalTransform.FromPositionRotationScale(
@@ -125,6 +130,7 @@ public partial struct CreateAtomJob : IJobEntity
     }
 
     [BurstCompile]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void CreateElectronShells(int chunkIndex, int atomicNumber, float3 centerPos)
     {
         int remainingElectrons = atomicNumber;
@@ -214,75 +220,75 @@ namespace AtomicSimulation.Core
 }
 
 
-namespace AtomicSimulation.Core
-{
-    [BurstCompile]
-    [UpdateInGroup(typeof(SimulationSystemGroup))]
-    [UpdateAfter(typeof(ElectronOrbitSystem))]
-    public partial struct ElementProgressionSystem : ISystem
-    {
-        [BurstCompile]
-        public void OnUpdate(ref SystemState state)
-        {
-            var config = SystemAPI.GetSingleton<SimulationConfig>();
-            var timerRW = SystemAPI.GetSingletonRW<SimulationTimer>();
-
-            ref var timer = ref timerRW.ValueRW;
-            timer.Timer += SystemAPI.Time.DeltaTime;
-
-            if (timer.Timer >= config.ElementProgressionInterval &&
-                timer.CurrentMaxAtomicNumber < config.MaxAtomicNumber)
-            {
-                timer.Timer = 0f;
-                timer.CurrentMaxAtomicNumber++;
-
-                CreateNextElement(ref state, timer.CurrentMaxAtomicNumber, config);
-                var ecb = new EntityCommandBuffer(Allocator.TempJob);
-
-                // Process new atoms that need to be created
-                var createAtomJob = new CreateAtomJob
-                {
-                    ECB = ecb.AsParallelWriter(),
-                    Config = SystemAPI.GetSingleton<SimulationConfig>()
-                };
-
-                state.Dependency = createAtomJob.ScheduleParallel(state.Dependency);
-                state.Dependency.Complete();
-
-                ecb.Playback(state.EntityManager);
-                ecb.Dispose();
-
-                // Log element creation (only in development builds)
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-                if (timer.CurrentMaxAtomicNumber <= AtomicData.ElementNames.Length)
-                {
-                    UnityEngine.Debug.Log(
-                        $"Created {AtomicData.ElementNames[timer.CurrentMaxAtomicNumber - 1]} (Z={timer.CurrentMaxAtomicNumber})");
-                }
-#endif
-            }
-        }
-
-        [BurstCompile]
-        private void CreateNextElement(ref SystemState state, int atomicNumber, in SimulationConfig config)
-        {
-            // Calculate grid position
-            int row = (atomicNumber - 1) / config.ElementsPerRow;
-            int col = (atomicNumber - 1) % config.ElementsPerRow;
-
-            float3 position = new float3(
-                col * config.AtomSpacing,
-                -row * config.AtomSpacing,
-                0f
-            );
-
-            var atomEntity = state.EntityManager.CreateEntity();
-            state.EntityManager.AddComponentData(atomEntity, new AtomicNumber { Value = atomicNumber });
-            state.EntityManager.AddComponentData(atomEntity, new AtomCenter { Position = position });
-            state.EntityManager.AddComponentData(atomEntity, new NeedsAtomSetup());
-        }
-    }
-}
+// namespace AtomicSimulation.Core
+// {
+//     [BurstCompile]
+//     [UpdateInGroup(typeof(SimulationSystemGroup))]
+//     [UpdateAfter(typeof(ElectronOrbitSystem))]
+//     public partial struct ElementProgressionSystem : ISystem
+//     {
+//         [BurstCompile]
+//         public void OnUpdate(ref SystemState state)
+//         {
+//             var config = SystemAPI.GetSingleton<SimulationConfig>();
+//             var timerRW = SystemAPI.GetSingletonRW<SimulationTimer>();
+//
+//             ref var timer = ref timerRW.ValueRW;
+//             timer.Timer += SystemAPI.Time.DeltaTime;
+//
+//             if (timer.Timer >= config.ElementProgressionInterval &&
+//                 timer.CurrentMaxAtomicNumber < config.MaxAtomicNumber)
+//             {
+//                 timer.Timer = 0f;
+//                 timer.CurrentMaxAtomicNumber++;
+//
+//                 CreateNextElement(ref state, timer.CurrentMaxAtomicNumber, config);
+//                 var ecb = new EntityCommandBuffer(Allocator.TempJob);
+//
+//                 // Process new atoms that need to be created
+//                 var createAtomJob = new CreateAtomJob
+//                 {
+//                     ECB = ecb.AsParallelWriter(),
+//                     Config = SystemAPI.GetSingleton<SimulationConfig>()
+//                 };
+//
+//                 state.Dependency = createAtomJob.ScheduleParallel(state.Dependency);
+//                 state.Dependency.Complete();
+//
+//                 ecb.Playback(state.EntityManager);
+//                 ecb.Dispose();
+//
+//                 // Log element creation (only in development builds)
+// #if DEVELOPMENT_BUILD || UNITY_EDITOR
+//                 if (timer.CurrentMaxAtomicNumber <= AtomicData.ElementNames.Length)
+//                 {
+//                     UnityEngine.Debug.Log(
+//                         $"Created {AtomicData.ElementNames[timer.CurrentMaxAtomicNumber - 1]} (Z={timer.CurrentMaxAtomicNumber})");
+//                 }
+// #endif
+//             }
+//         }
+//
+//         [BurstCompile]
+//         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+//         private void CreateNextElement(ref SystemState state, int atomicNumber, in SimulationConfig config)
+//         {
+//             // Calculate grid position
+//             int row = (atomicNumber - 1) / config.ElementsPerRow;
+//             int col = (atomicNumber - 1) % config.ElementsPerRow;
+//
+//             float3 position = new float3(
+//                 col * config.AtomSpacing,
+//                 -row * config.AtomSpacing,
+//                 0f
+//             );
+//
+//             var atomEntity = state.EntityManager.CreateEntity();
+//             state.EntityManager.AddComponentData(atomEntity, new AtomicNumber { Value = atomicNumber });
+//             state.EntityManager.AddComponentData(atomEntity, new AtomCenter { Position = position });
+//         }
+//     }
+// }
 
 
 namespace AtomicSimulation.Core
@@ -293,20 +299,6 @@ namespace AtomicSimulation.Core
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            // Create simulation timer singleton  
-            var timerEntity = state.EntityManager.CreateEntity();
-            state.EntityManager.AddComponentData(timerEntity, new SimulationTimer
-            {
-                Timer = 0f,
-                CurrentMaxAtomicNumber = 1
-            });
-
-            // Create the first atom (Hydrogen)
-            var hydrogenEntity = state.EntityManager.CreateEntity();
-            state.EntityManager.AddComponentData(hydrogenEntity, new AtomicNumber { Value = 1 });
-            state.EntityManager.AddComponentData(hydrogenEntity, new AtomCenter { Position = float3.zero });
-            state.EntityManager.AddComponentData(hydrogenEntity, new NeedsAtomSetup());
-
             var config = SystemAPI.GetSingleton<SimulationConfig>();
             var ecb = new EntityCommandBuffer(Allocator.TempJob);
 
@@ -321,10 +313,6 @@ namespace AtomicSimulation.Core
 
             ecb.Playback(state.EntityManager);
             ecb.Dispose();
-
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-            UnityEngine.Debug.Log("Atomic Simulation Bootstrap Complete - Starting with Hydrogen");
-#endif
             state.Enabled = false;
         }
     }
