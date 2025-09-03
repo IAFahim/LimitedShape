@@ -263,10 +263,8 @@ public partial struct CreateAtomJob : IJobEntity
 
 namespace AtomicSimulation.Core
 {
-    // System for nuclear particles (protons and neutrons) - attraction to center
     [BurstCompile]
     [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-    [UpdateAfter(typeof(Unity.Physics.Systems.PhysicsSystemGroup))]
     public partial struct NuclearForceSystem : ISystem
     {
         [BurstCompile]
@@ -282,6 +280,7 @@ namespace AtomicSimulation.Core
             };
 
             state.Dependency = nuclearForceJob.ScheduleParallel(state.Dependency);
+            state.Dependency.Complete();
         }
 
         [BurstCompile]
@@ -334,13 +333,13 @@ namespace AtomicSimulation.Core
             
             private float CalculateNuclearForce(float distance, NuclearForce nuclearForce)
             {
-                // Strong nuclear force - attractive at short range, drops off quickly
+                // Gentle attraction that doesn't cause oscillations
                 if (distance > nuclearForce.MaxDistance)
                     return 0f;
                     
-                // Exponential decay with optimal distance
+                // Linear falloff instead of exponential to reduce oscillations
                 float normalizedDistance = distance / nuclearForce.OptimalDistance;
-                return nuclearForce.StrengthMultiplier * math.exp(-normalizedDistance * normalizedDistance);
+                return nuclearForce.StrengthMultiplier * math.max(0f, 1f - normalizedDistance);
             }
         }
     }
@@ -391,8 +390,8 @@ namespace AtomicSimulation.Core
                 float3 centerPos = atomCenter.Position;
                 float3 orbitDirection = new float3(
                     math.cos(orbitData.CurrentAngle),
-                    math.sin(orbitData.CurrentAngle),
-                    0
+                    0f, // Keep electrons in XZ plane, or add Y variation for 3D orbits
+                    math.sin(orbitData.CurrentAngle)
                 );
                 
                 orbitData.TargetOrbitPosition = centerPos + orbitDirection * orbitData.TargetRadius;
@@ -427,44 +426,6 @@ namespace AtomicSimulation.Core
                 
                 // Apply damping
                 velocity.Linear *= (1.0f - ElectronDamping * DeltaTime);
-            }
-        }
-    }
-
-    // System for inter-particle electromagnetic forces (electron-electron repulsion, etc.)
-    [BurstCompile]
-    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-    [UpdateAfter(typeof(Unity.Physics.Systems.PhysicsSystemGroup))]
-    public partial struct ElectromagneticInteractionSystem : ISystem
-    {
-        [BurstCompile]
-        public void OnUpdate(ref SystemState state)
-        {
-            float deltaTime = SystemAPI.Time.DeltaTime;
-            
-            var interactionJob = new ElectromagneticInteractionJob
-            {
-                DeltaTime = deltaTime
-            };
-
-            state.Dependency = interactionJob.ScheduleParallel(state.Dependency);
-        }
-
-        [BurstCompile]
-        private partial struct ElectromagneticInteractionJob : IJobEntity
-        {
-            public float DeltaTime;
-            
-            private void Execute(
-                ref PhysicsVelocity velocity,
-                in LocalTransform transform,
-                in ElectromagneticForce emForce,
-                in PhysicsMass mass
-            )
-            {
-                // This would need to be expanded to handle particle-particle interactions
-                // For now, we'll let the orbital system handle the primary forces
-                // In a full implementation, you'd query nearby particles and calculate repulsion/attraction
             }
         }
     }

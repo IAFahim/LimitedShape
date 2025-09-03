@@ -104,9 +104,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a1ccadf9a0a4d8fa65c660d2b927e70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Atoms.Data::AtomicSimulation.Core.PidAuthoring
-  kp: 0
-  ki: 0
-  kd: 0
+  kp: 10
+  ki: 1
+  kd: 5
+  maxForce: 25
+  integralClamp: 10
   integral:
     x: 0
     y: 0

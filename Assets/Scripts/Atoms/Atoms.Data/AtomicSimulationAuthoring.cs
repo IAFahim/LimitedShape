@@ -53,6 +53,24 @@ namespace AtomicSimulation.Authoring
         };
 
         public float forceFieldStrength = 10;
+        
+        [Header("Physics Parameters")]
+        [Tooltip("Nuclear force strength for protons/neutrons")]
+        public float nuclearForceStrength = 2f;
+        
+        [Tooltip("Electromagnetic force strength for electrons")]
+        public float electromagneticForceStrength = 0.5f;
+        
+        [Tooltip("Orbital force multiplier for electrons")]
+        public float electronOrbitForce = 1f;
+        
+        [Tooltip("Damping for nucleus particles (0-1)")]
+        [Range(0f, 1f)]
+        public float nucleusDamping = 0.8f;
+        
+        [Tooltip("Damping for electrons (0-1)")]
+        [Range(0f, 1f)]
+        public float electronDamping = 0.3f;
 
 
         public class AtomicSimulationBaker : Baker<AtomicSimulationAuthoring>
@@ -71,6 +89,11 @@ namespace AtomicSimulation.Authoring
                     BaseOrbitSpeed = authoring.baseOrbitSpeed,
                     M = authoring.m,
                     C = authoring.c,
+                    NuclearForceStrength = authoring.nuclearForceStrength,
+                    ElectromagneticForceStrength = authoring.electromagneticForceStrength,
+                    ElectronOrbitForce = authoring.electronOrbitForce,
+                    NucleusDamping = authoring.nucleusDamping,
+                    ElectronDamping = authoring.electronDamping
                 });
 
                 AddComponent(entity, new SimulationTimer

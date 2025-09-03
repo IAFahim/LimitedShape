@@ -42,8 +42,8 @@ namespace AtomicSimulation.Authoring
 
             orbitPos = centerPos + new float3(
                 shellRadius * math.cos(initialAngle),
-                shellRadius * math.sin(initialAngle),
-                0f
+                0f,
+                shellRadius * math.sin(initialAngle)
             );
         }
 
