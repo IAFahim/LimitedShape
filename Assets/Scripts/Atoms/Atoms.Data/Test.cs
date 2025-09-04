@@ -17,10 +17,14 @@ namespace AtomicSimulation.Core
         public float TargetSpeed;
         public float CurrentAngle;
         public int ShellNumber; // K=1, L=2, M=3, etc.
-        public float3 TargetOrbitPosition;
         public float OrbitForceMultiplier;
     }
-    
+
+    public struct TargetPosition : IComponentData
+    {
+        public float3 Position;
+    }
+
     public struct ElectronShellData
     {
         public BlobArray<int> MaxPerShells;
@@ -34,11 +38,14 @@ namespace AtomicSimulation.Core
     
     public struct AtomicNumber : IComponentData { public byte Value; }
     public struct AtomCenter : IComponentData { public float3 Position; }
+
     public struct AtomReady : IComponentData, IEnableableComponent { }
 
     // --- PARTICLE TAGS ---
     public struct Proton : IComponentData { }
+
     public struct Neutron : IComponentData { }
+
     public struct Electron : IComponentData { }
 
     // Enhanced PID Controller for 3D physics
@@ -52,6 +59,7 @@ namespace AtomicSimulation.Core
         // PID state
         public float3 Integral;
         public float3 PreviousError;
+        
         public float MaxForce;
         public float IntegralClamp;
     }
@@ -68,7 +76,6 @@ namespace AtomicSimulation.Core
     public struct ElectromagneticForce : IComponentData
     {
         public float ChargeStrength;
-        public float RepulsionMultiplier;
     }
 
     public struct GameState : IComponentData
@@ -88,9 +95,6 @@ namespace AtomicSimulation.Core
         public Entity ElectronPrefab;
         public float BaseOrbitSpeed;
         
-        // Physics parameters
-        public float NuclearForceStrength;
-        public float ElectromagneticForceStrength;
         public float ElectronOrbitForce;
         public float NucleusDamping;
         public float ElectronDamping;
@@ -141,7 +145,7 @@ public partial struct CreateAtomJob : IJobEntity
             var protonEntity = ECB.Instantiate(chunkIndex, Config.ProtonPrefab);
             AtomicData.GetNucleusParticleOffset(i, nucleus, m, c, out var nucleusOffset);
 
-            ECB.AddComponent(chunkIndex, protonEntity,
+            ECB.SetComponent(chunkIndex, protonEntity,
                 LocalTransform.FromPositionRotationScale(
                     centerPos + nucleusOffset * 0.1f, // Start closer to center
                     quaternion.identity,
@@ -149,23 +153,9 @@ public partial struct CreateAtomJob : IJobEntity
                 )
             );
             
-            // Add physics and force components
-            ECB.AddComponent(chunkIndex, protonEntity, new Proton());
-            ECB.AddComponent(chunkIndex, protonEntity, new AtomCenter { Position = centerPos });
-            ECB.AddComponent(chunkIndex, protonEntity, new NuclearForce 
-            { 
-                StrengthMultiplier = Config.NuclearForceStrength,
-                OptimalDistance = 0.5f,
-                MaxDistance = 2.0f
-            });
-            ECB.AddComponent(chunkIndex, protonEntity, new PID
-            {
-                Kp = 50f,
-                Ki = 5f,
-                Kd = 10f,
-                MaxForce = 100f,
-                IntegralClamp = 20f
-            });
+            ECB.SetComponent(chunkIndex, protonEntity, new AtomCenter { Position = centerPos });
+            
+            
         }
 
         // Create neutrons  
@@ -187,7 +177,6 @@ public partial struct CreateAtomJob : IJobEntity
             ECB.AddComponent(chunkIndex, neutronEntity, new AtomCenter { Position = centerPos });
             ECB.AddComponent(chunkIndex, neutronEntity, new NuclearForce 
             { 
-                StrengthMultiplier = Config.NuclearForceStrength,
                 OptimalDistance = 0.5f,
                 MaxDistance = 2.0f
             });
@@ -226,12 +215,10 @@ public partial struct CreateAtomJob : IJobEntity
                     out var initialAngle, out var orbitPos);
 
                 var electronEntity = ECB.Instantiate(chunkIndex, Config.ElectronPrefab);
-                ECB.AddComponent(chunkIndex, electronEntity, LocalTransform.FromPositionRotationScale(
-                    orbitPos, quaternion.identity, Config.ElectronScale));
+                ECB.SetComponent(chunkIndex, electronEntity, LocalTransform.FromPositionRotationScale(orbitPos, quaternion.identity, Config.ElectronScale));
                 
                 // Add electron components
-                ECB.AddComponent(chunkIndex, electronEntity, new Electron());
-                ECB.AddComponent(chunkIndex, electronEntity, new OrbitData
+                ECB.SetComponent(chunkIndex, electronEntity, new OrbitData
                 {
                     TargetRadius = shellRadius,
                     TargetSpeed = shellSpeed,
@@ -239,20 +226,7 @@ public partial struct CreateAtomJob : IJobEntity
                     ShellNumber = shellNumber,
                     OrbitForceMultiplier = Config.ElectronOrbitForce
                 });
-                ECB.AddComponent(chunkIndex, electronEntity, new AtomCenter { Position = centerPos });
-                ECB.AddComponent(chunkIndex, electronEntity, new ElectromagneticForce
-                {
-                    ChargeStrength = Config.ElectromagneticForceStrength,
-                    RepulsionMultiplier = 1.0f
-                });
-                ECB.AddComponent(chunkIndex, electronEntity, new PID
-                {
-                    Kp = 25f,
-                    Ki = 2f,
-                    Kd = 8f,
-                    MaxForce = 50f,
-                    IntegralClamp = 15f
-                });
+                ECB.SetComponent(chunkIndex, electronEntity, new AtomCenter { Position = centerPos });
             }
 
             remainingElectrons -= electronsInShell;
@@ -278,7 +252,7 @@ namespace AtomicSimulation.Core
                 DeltaTime = deltaTime,
                 NucleusDamping = config.NucleusDamping
             };
-
+            
             state.Dependency = nuclearForceJob.ScheduleParallel(state.Dependency);
             state.Dependency.Complete();
         }
@@ -286,8 +260,8 @@ namespace AtomicSimulation.Core
         [BurstCompile]
         private partial struct NuclearForceJob : IJobEntity
         {
-            public float DeltaTime;
-            public float NucleusDamping;
+            [ReadOnly] public float DeltaTime;
+            [ReadOnly] public float NucleusDamping;
 
             private void Execute(
                 ref PhysicsVelocity velocity,
@@ -346,8 +320,7 @@ namespace AtomicSimulation.Core
 
     // System for electrons - orbital motion with PID control
     [BurstCompile]
-    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-    [UpdateAfter(typeof(Unity.Physics.Systems.PhysicsSystemGroup))]
+    [UpdateInGroup(typeof(SimulationSystemGroup), OrderLast = true)]
     public partial struct ElectronOrbitSystem : ISystem
     {
         [BurstCompile]
@@ -374,6 +347,7 @@ namespace AtomicSimulation.Core
             private void Execute(
                 ref PhysicsVelocity velocity,
                 ref OrbitData orbitData,
+                ref TargetPosition targetPosition,
                 ref PID pid,
                 in LocalTransform transform,
                 in AtomCenter atomCenter,
@@ -394,11 +368,11 @@ namespace AtomicSimulation.Core
                     math.sin(orbitData.CurrentAngle)
                 );
                 
-                orbitData.TargetOrbitPosition = centerPos + orbitDirection * orbitData.TargetRadius;
+                targetPosition.Position = centerPos + orbitDirection * orbitData.TargetRadius;
                 
                 // Current position
                 float3 currentPos = transform.Position;
-                float3 displacement = orbitData.TargetOrbitPosition - currentPos;
+                float3 displacement = targetPosition.Position - currentPos;
                 
                 // PID Controller for orbital position
                 float3 error = displacement;

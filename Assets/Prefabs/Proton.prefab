@@ -13,6 +13,10 @@ GameObject:
   - component: {fileID: 8925144321307636744}
   - component: {fileID: 4504143643131919480}
   - component: {fileID: 2976290380834985817}
+  - component: {fileID: 3683810697111713020}
+  - component: {fileID: 6485757283840326888}
+  - component: {fileID: 2332694709181227365}
+  - component: {fileID: 8699492935697916944}
   m_Layer: 0
   m_Name: Proton
   m_TagString: Untagged
@@ -285,3 +289,71 @@ MonoBehaviour:
         Tag07: 0
     m_SerializedVersion: 1
   m_SerializedVersion: 1
+--- !u!114 &3683810697111713020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5225003289196216097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a1ccadf9a0a4d8fa65c660d2b927e70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Atoms.Authoring::Atoms.Atoms.Authoring.PidAuthoring
+  kp: 50
+  ki: 5
+  kd: 10
+  maxForce: 100
+  integralClamp: 20
+  integral:
+    x: 0
+    y: 0
+    z: 0
+  previousError:
+    x: 0
+    y: 0
+    z: 0
+--- !u!114 &6485757283840326888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5225003289196216097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19843e17734440439eca62ad2857360e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Atoms.Authoring::AtomicSimulation.Core.NuclearForceAuthoring
+  strengthMultiplier: 2
+  optimalDistance: 0.5
+  maxDistance: 2
+--- !u!114 &2332694709181227365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5225003289196216097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6f1724bbab74ee291307a4272f0cd4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Atoms.Data::AtomicSimulation.Core.AtomCenterAuthoring
+  position:
+    x: 0
+    y: 0
+    z: 0
+--- !u!114 &8699492935697916944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5225003289196216097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca0dd259e0a84193b956f14c50b2d294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Atoms.Authoring::AtomicSimulation.Core.ProtonAuthoring

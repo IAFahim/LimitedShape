@@ -52,14 +52,8 @@ namespace AtomicSimulation.Authoring
             1.5f // Q shell (n=7)
         };
 
-        public float forceFieldStrength = 10;
         
         [Header("Physics Parameters")]
-        [Tooltip("Nuclear force strength for protons/neutrons")]
-        public float nuclearForceStrength = 2f;
-        
-        [Tooltip("Electromagnetic force strength for electrons")]
-        public float electromagneticForceStrength = 0.5f;
         
         [Tooltip("Orbital force multiplier for electrons")]
         public float electronOrbitForce = 1f;
@@ -89,8 +83,6 @@ namespace AtomicSimulation.Authoring
                     BaseOrbitSpeed = authoring.baseOrbitSpeed,
                     M = authoring.m,
                     C = authoring.c,
-                    NuclearForceStrength = authoring.nuclearForceStrength,
-                    ElectromagneticForceStrength = authoring.electromagneticForceStrength,
                     ElectronOrbitForce = authoring.electronOrbitForce,
                     NucleusDamping = authoring.nucleusDamping,
                     ElectronDamping = authoring.electronDamping

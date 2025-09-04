@@ -1,8 +1,9 @@
+using AtomicSimulation.Core;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace AtomicSimulation.Core
+namespace Atoms.Atoms.Authoring
 {
     // Updated PidAuthoring with proper values and missing fields
     public class PidAuthoring : MonoBehaviour

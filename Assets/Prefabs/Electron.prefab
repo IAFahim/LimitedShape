@@ -14,6 +14,11 @@ GameObject:
   - component: {fileID: 3382105888594776665}
   - component: {fileID: -7496513154815866899}
   - component: {fileID: -3070154404127733814}
+  - component: {fileID: 9002180099492273290}
+  - component: {fileID: 592185035660902097}
+  - component: {fileID: 5001249277130075248}
+  - component: {fileID: 1482488866462571187}
+  - component: {fileID: 8068830552423130044}
   m_Layer: 0
   m_Name: Electron
   m_TagString: Untagged
@@ -104,11 +109,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a1ccadf9a0a4d8fa65c660d2b927e70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Atoms.Data::AtomicSimulation.Core.PidAuthoring
-  kp: 10
-  ki: 1
-  kd: 5
-  maxForce: 25
-  integralClamp: 10
+  kp: 25
+  ki: 2
+  kd: 8
+  maxForce: 50
+  integralClamp: 15
   integral:
     x: 0
     y: 0
@@ -311,3 +316,77 @@ MonoBehaviour:
         Tag07: 0
     m_SerializedVersion: 1
   m_SerializedVersion: 1
+--- !u!114 &9002180099492273290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5225003289196216097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adb341870f1945ce9baea3f111f9169d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Atoms.Authoring::AtomicSimulation.Core.ElectronAuthoring
+--- !u!114 &592185035660902097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5225003289196216097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19310e670af54fa9aa09733f2c9d9c74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Atoms.Authoring::AtomicSimulation.Core.ElectromagneticForceAuthoring
+  chargeStrength: 0.5
+--- !u!114 &5001249277130075248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5225003289196216097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b920e56339884df6af073b0f4c85333b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Atoms.Authoring::AtomicSimulation.Core.TargetPositionAuthoring
+  position:
+    x: 0
+    y: 0
+    z: 0
+--- !u!114 &1482488866462571187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5225003289196216097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ded95031d7fd4fc7aa2c8daad2510220, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Atoms.Authoring::Atoms.Atoms.Authoring.OrbitDataAuthoring
+  targetRadius: 0
+  targetSpeed: 0
+  currentAngle: 0
+  shellNumber: 0
+  orbitForceMultiplier: 0
+--- !u!114 &8068830552423130044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5225003289196216097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6f1724bbab74ee291307a4272f0cd4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Atoms.Data::AtomicSimulation.Core.AtomCenterAuthoring
+  position:
+    x: 0
+    y: 0
+    z: 0
