@@ -201,8 +201,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50c18678887c4cd9b1106a95f889215c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Atoms.Data::AtomicSimulation.Authoring.AtomicSimulationAuthoring
-  nucleusScale: 0.1
-  electronScale: 0.1
+  nucleusScale: 0.5
+  electronScale: 1
   m: 0.001
   c: 0.02
   neutron: {fileID: 5225003289196216097, guid: 89ec63cf6ffe6863b9d997f34d49e25d, type: 3}
@@ -214,16 +214,13 @@ MonoBehaviour:
   maxAtomicNumber: 118
   maxPerShells: 02000000080000001200000020000000200000001200000008000000
   shellRadius:
-  - 0.5
-  - 0.65
-  - 0.7
-  - 0.75
-  - 0.8
-  - 0.8
-  - 0.8
-  forceFieldStrength: 10
-  nuclearForceStrength: 2
-  electromagneticForceStrength: 0.5
+  - 3.5
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
   electronOrbitForce: 1
   nucleusDamping: 0.8
   electronDamping: 0.3

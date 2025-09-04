@@ -154,8 +154,6 @@ public partial struct CreateAtomJob : IJobEntity
             );
             
             ECB.SetComponent(chunkIndex, protonEntity, new AtomCenter { Position = centerPos });
-            
-            
         }
 
         // Create neutrons  
@@ -164,7 +162,7 @@ public partial struct CreateAtomJob : IJobEntity
             var neutronEntity = ECB.Instantiate(chunkIndex, Config.NeutronPrefab);
             AtomicData.GetNucleusParticleOffset(atomicNumber + i, nucleus, m, c, out var nucleusOffset);
 
-            ECB.AddComponent(chunkIndex, neutronEntity,
+            ECB.SetComponent(chunkIndex, neutronEntity,
                 LocalTransform.FromPositionRotationScale(
                     centerPos + nucleusOffset * 0.1f, // Start closer to center
                     quaternion.identity,
@@ -172,22 +170,7 @@ public partial struct CreateAtomJob : IJobEntity
                 )
             );
             
-            // Add physics and force components
-            ECB.AddComponent(chunkIndex, neutronEntity, new Neutron());
-            ECB.AddComponent(chunkIndex, neutronEntity, new AtomCenter { Position = centerPos });
-            ECB.AddComponent(chunkIndex, neutronEntity, new NuclearForce 
-            { 
-                OptimalDistance = 0.5f,
-                MaxDistance = 2.0f
-            });
-            ECB.AddComponent(chunkIndex, neutronEntity, new PID
-            {
-                Kp = 50f,
-                Ki = 5f,
-                Kd = 10f,
-                MaxForce = 100f,
-                IntegralClamp = 20f
-            });
+            ECB.SetComponent(chunkIndex, neutronEntity, new AtomCenter { Position = centerPos });
         }
     }
 
