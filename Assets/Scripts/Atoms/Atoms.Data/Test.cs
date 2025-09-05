@@ -22,7 +22,7 @@ namespace AtomicSimulation.Core
 
     public struct TargetPosition : IComponentData
     {
-        public float3 Position;
+        public float3 Value;
     }
 
     public struct ElectronShellData
@@ -351,11 +351,11 @@ namespace AtomicSimulation.Core
                     math.sin(orbitData.CurrentAngle)
                 );
                 
-                targetPosition.Position = centerPos + orbitDirection * orbitData.TargetRadius;
+                targetPosition.Value = centerPos + orbitDirection * orbitData.TargetRadius;
                 
                 // Current position
                 float3 currentPos = transform.Position;
-                float3 displacement = targetPosition.Position - currentPos;
+                float3 displacement = targetPosition.Value - currentPos;
                 
                 // PID Controller for orbital position
                 float3 error = displacement;
